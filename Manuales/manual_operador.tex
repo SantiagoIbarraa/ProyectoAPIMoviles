@@ -1,0 +1,131 @@
+
+% Carátula para el manual del operador
+\documentclass[a4paper,12pt]{article}
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage[colorlinks=true, linkcolor=blue, urlcolor=blue]{hyperref}
+\geometry{top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm}
+
+\begin{document}
+
+% Logo arriba a la derecha
+\begin{flushright}
+    \includegraphics[width=4cm]{LOGO-EEST1.png}
+\end{flushright}
+
+\vspace*{2cm}
+
+\begin{center}
+    {\LARGE\bfseries Manual del Operador} \\[1.5cm]
+    \textbf{Integrantes:} \\[0.3cm]
+    Santiago Ibarra \\[0.2cm]
+    Agustin Colman \\[0.2cm]
+    Carlos Insaurralde \\[0.2cm]
+    Gabriel Beneitez \\[1.2cm]
+    Curso: 7°2 \\
+    \vspace{0.5cm}
+    \textbf{Materia:} Proyecto de Desarrollo de Software para Plataformas Móviles
+\end{center}
+
+\vfill
+
+\begin{center}
+    \textit{Escuela de Educación Secundaria Técnica N°1} \\
+    \textit{Año 2025}
+\end{center}
+
+\thispagestyle{empty}
+\newpage
+
+% Índice de contenidos con enlaces
+\tableofcontents
+\newpage
+
+% ===============================
+% 1. Introducción
+% ===============================
+\section{Introducción}\label{sec:introduccion}
+Este manual está dirigido a operadores y usuarios que deseen poner en funcionamiento el sistema de Reproductor Inteligente de música. Aquí se detallan los pasos para la correcta instalación y puesta en marcha del sistema, así como la ubicación de los archivos necesarios.
+
+% ===============================
+% 2. Requisitos y Preparación
+% ===============================
+\section{Requisitos y Preparación}\label{sec:requisitos}
+\begin{itemize}
+    \item \textbf{Sistema operativo:} Windows
+    \item \textbf{XAMPP:} Instalado y configurado (incluyendo Apache y MySQL)
+    \item \textbf{Google Drive:} Acceso para descargar la carpeta de canciones
+    \item \textbf{GitHub:} Acceso para descargar los archivos del proyecto
+\end{itemize}
+
+% ===============================
+% 3. Estructura de Carpetas y Archivos
+% ===============================
+\section{Estructura de Carpetas y Archivos}\label{sec:estructura}
+El proyecto debe ubicarse en la siguiente ruta:
+
+\begin{itemize}
+    \item \textbf{Ruta principal:} \\C:\textbackslash xampp\textbackslash htdocs\textbackslash proyectomoviles
+\end{itemize}
+
+\begin{verbatim}
+C:\xampp\htdocs\proyectomoviles
+|-- ppm_music.html / ppm_music.js
+|-- list_songs.php
+|-- get_songs.php
+|-- songs_database.sql
+|-- ...
+|-- (otras carpetas y archivos del proyecto)
+\end{verbatim}
+
+% ===============================
+% 4. Descarga de Archivos Necesarios
+% ===============================
+\section{Descarga de Archivos Necesarios}\label{sec:descarga}
+\subsection{Archivos del Proyecto}\label{subsec:archivos}
+Los archivos principales del sistema deben descargarse desde el repositorio de GitHub:
+
+\begin{itemize}
+    \item \textbf{Repositorio:} \\ \url{https://github.com/SantiagoIbarraa/ProyectoAPIMoviles}
+    \item Descargar y copiar todo el contenido en la carpeta mencionada anteriormente.
+\end{itemize}
+
+\subsection{Carpeta de Canciones}\label{subsec:canciones}
+La carpeta con las canciones debe descargarse desde Google Drive:
+
+\begin{itemize}
+    \item \textbf{Enlace:} \\ \url{https://drive.google.com/file/d/1PMr6eChcD50MDNXACt3o5pAC62_7IB9x/view?usp=sharing}
+    \item Extraer la carpeta de canciones y colocarla dentro de la ruta principal del proyecto.
+\end{itemize}
+
+% ===============================
+% 5. Set-Up y Puesta en Marcha
+% ===============================
+\section{Set-Up y Puesta en Marcha}\label{sec:setup}
+\begin{enumerate}
+    \item Instalar XAMPP y asegurarse de que los servicios de Apache y MySQL estén activos.
+    \item Descargar los archivos del proyecto desde GitHub y copiarlos en \\C:\textbackslash xampp\textbackslash htdocs\textbackslash proyectomoviles.
+    \item Descargar la carpeta de canciones desde Google Drive y colocarla en la misma carpeta del proyecto.
+    \item Importar el archivo \texttt{songs\_database.sql} en MySQL usando phpMyAdmin (incluido en XAMPP):
+        \begin{itemize}
+            \item Acceder a \url{http://localhost/phpmyadmin}
+            \item Crear una nueva base de datos (por ejemplo, \texttt{songs})
+            \item Importar el archivo \texttt{songs\_database.sql}
+        \end{itemize}
+    \item Abrir el navegador y acceder a \url{http://localhost/proyectomoviles/ppm_music.html} para usar el sistema.
+\end{enumerate}
+
+% ===============================
+% 6. Recomendaciones
+% ===============================
+\section{Recomendaciones}\label{sec:recomendaciones}
+\begin{itemize}
+    \item No modificar la estructura de carpetas ni los nombres de archivos.
+    \item Realizar copias de seguridad periódicas de la base de datos y la carpeta de canciones.
+    \item Ante cualquier inconveniente, revisar la configuración de XAMPP y los permisos de carpetas.
+\end{itemize}
+
+\end{document}

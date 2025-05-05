@@ -1,0 +1,741 @@
+% Carátula para el manual del programador
+\documentclass[a4paper,12pt]{article}
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{xcolor} % Added package for \textcolor command
+\usepackage[colorlinks=false, linkcolor=black, urlcolor=black]{hyperref}
+\geometry{top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm}
+
+\begin{document}
+
+% Logo arriba a la derecha
+\begin{flushright}
+    \includegraphics[width=4cm]{LOGO-EEST1.png}
+\end{flushright}
+
+\vspace*{2cm}
+
+\begin{center}
+    {\LARGE\bfseries Manual del Programador} \\[1.5cm]
+    \textbf{Integrantes:} \\[0.3cm]
+    Santiago Ibarra \\[0.2cm]
+    Agustin Colman \\[0.2cm]
+    Carlos Insaurralde \\[0.2cm]
+    Gabriel Beneitez \\[1.2cm]
+    Curso: 7°2 \\
+    \vspace{0.5cm}
+    \textbf{Materia:} Proyecto de Desarrollo de Software para Plataformas Móviles
+\end{center}
+
+\vfill
+
+\begin{center}
+    \textit{Escuela de Educación Secundaria Técnica N°1} \\
+    \textit{Año 2025}
+\end{center}
+
+\thispagestyle{empty}
+\newpage
+
+% Índice de contenidos con enlaces
+\tableofcontents
+\newpage
+
+% ===============================
+% 1. Introducción
+% ===============================
+\section{Introducción}
+Este manual está dirigido a programadores que deseen comprender, mantener o extender el sistema de Reproductor Inteligente de música desarrollado para la materia ``Proyecto de Desarrollo de Software para Plataformas Móviles". Aquí se documentan la estructura, los archivos principales, la base de datos y las recomendaciones para el desarrollo.
+
+% ===============================
+% 2. Estructura del Proyecto
+% ===============================
+\section{Estructura del Proyecto}
+El proyecto se compone principalmente de los siguientes archivos y carpetas:
+\begin{itemize}
+    \item \textbf{ppm\_music.html / ppm\_music.js}: Interfaz y lógica principal del reproductor.
+    \item \textbf{list\_songs.php}: Lista todas las canciones desde la base de datos.
+    \item \textbf{get\_songs.php}: Devuelve las canciones en formato JSON para la app.
+    \item \textbf{songs\_database.sql}: Script SQL para la base de datos de canciones.
+    \item \textbf{Manuales/}: Carpeta de documentación.
+\end{itemize}
+
+% ===============================
+% 3. Base de Datos
+% ===============================
+\section{Base de Datos}
+La base de datos se encuentra en el archivo \texttt{songs\_database.sql}. Contiene la tabla \texttt{songs} con los campos principales: id, artist, name, year, ppm, audioUrl, entre otros.
+
+% ===============================
+% 4. Explicación de Archivos
+% ===============================
+\section{Explicación de Archivos}
+Esta sección describe el propósito y funcionamiento de los archivos principales que componen el sistema. Se detallan tanto los archivos de interfaz (HTML/JS) como los del backend (PHP y SQL), explicando su rol, interacción y ejemplos relevantes para el programador.
+
+\subsection{index.html}
+El archivo \texttt{index.html} es la página principal del sistema y cumple la función de ser la interfaz de usuario del ``Reproductor Inteligente". Este archivo HTML estructura toda la aplicación web y define la experiencia visual para el usuario. A continuación se describe en detalle cada sección del documento:
+
+\subsubsection{Estructura General}
+\begin{itemize}
+    \item \textbf{Doctype y Metadatos:}
+    \begin{verbatim}
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Reproductor Inteligente</title>
+        ...
+    </head>
+    \end{verbatim}
+    Define el tipo de documento como HTML5, establece el idioma español y configura metadatos importantes como la codificación UTF-8 y la configuración de viewport para dispositivos móviles.
+
+    \item \textbf{Enlaces a Recursos Externos:}
+    \begin{verbatim}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="ppm_music.js"></script>
+    \end{verbatim}
+    Importa Bootstrap 5 para el diseño responsivo, Bootstrap Icons para los iconos de la interfaz, y el archivo JavaScript principal \texttt{ppm\_music.js} que contiene toda la lógica de la aplicación.
+\end{itemize}
+
+\subsubsection{Estilos CSS Personalizados}
+\begin{itemize}
+    \item \textbf{Estilo General:}
+    \begin{verbatim}
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a1a, #333);
+            color: white;
+            min-height: 100vh;
+        }
+    \end{verbatim}
+    Define un fondo oscuro con degradado para toda la aplicación, texto blanco y altura mínima para ocupar toda la pantalla.
+
+    \item \textbf{Animaciones:}
+    \begin{verbatim}
+        .heart-icon {
+            animation: pulse 1s ease infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+    \end{verbatim}
+    Crea una animación de latido para el ícono de corazón en el título, utilizando transformaciones CSS y keyframes.
+
+    \item \textbf{Tarjetas de Canciones:}
+    \begin{verbatim}
+        .song-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            transition: transform 0.3s ease;
+        }
+        .song-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+    \end{verbatim}
+    Estiliza las tarjetas de canciones con un fondo semitransparente y un efecto de elevación al pasar el cursor.
+
+    \item \textbf{Control Deslizante:}
+    \begin{verbatim}
+        .slider-container {
+            width: 100%;
+            max-width: 500px;
+            margin: 2rem auto;
+        }
+        .custom-range {
+            height: 2rem;
+        }
+        .custom-range::-webkit-slider-thumb {
+            background: #ff4444;
+        }
+    \end{verbatim}
+    Personaliza el control deslizante de PPM, ajustando su tamaño, márgenes y el color del "thumb" (control deslizante).
+\end{itemize}
+
+\subsubsection{Componentes Principales de la Interfaz}
+\begin{itemize}
+    \item \textbf{Encabezado (header):}
+    \begin{verbatim}
+    <header class="bg-dark text-white py-3 mb-4">
+        <div class="container d-flex justify-content-between align-items-center">
+            <h2 class="mb-0">Reproductor Inteligente</h2>
+            <nav>
+                <a href="list_songs.php" class="btn btn-outline-light ms-2">Mostrar canciones</a>
+            </nav>
+        </div>
+    </header>
+    \end{verbatim}
+    Crea una barra de navegación superior con el título de la aplicación y un enlace al listado completo de canciones.
+
+    \item \textbf{Título Principal:}
+    \begin{verbatim}
+    <h1 class="text-center mb-5">
+        <span class="heart-icon">[emoji-corazon]</span> 
+        Reproductor Inteligente
+    </h1>
+    \end{verbatim}
+    Muestra el título principal con un ícono de corazón animado.
+
+    \item \textbf{Visualización y Control de PPM:}
+    \begin{verbatim}
+    <div class="text-center mb-4">
+        <div class="ppm-display mb-3">
+            <span id="ppmValue">140</span> PPM
+        </div>
+        <div class="slider-container">
+            <input type="range" class="form-range custom-range" id="ppmSlider" 
+                   min="100" max="180" value="140">
+        </div>
+        <button class="btn btn-danger mt-3" id="startSimulation">
+            Iniciar Simulación
+        </button>
+        <button class="btn btn-secondary mt-2 ms-2" id="stopSong" style="display:none">
+            <i class="bi bi-stop-fill"></i> Detener Canción
+        </button>
+    </div>
+    \end{verbatim}
+    Muestra el valor actual de PPM, un control deslizante para ajustarlo manualmente (rango 100-180), y botones para iniciar/detener la simulación y la reproducción.
+
+    \item \textbf{Tarjeta de Reproducción Actual:}
+    \begin{verbatim}
+    <div class="card song-card text-white" id="nowPlayingCard" style="display:none">
+        <div class="card-body">
+            <h5 class="card-title" id="nowPlayingTitle"></h5>
+            <h6 class="card-subtitle mb-2 text-muted" id="nowPlayingArtist"></h6>
+            <p class="card-text" id="nowPlayingYear"></p>
+            <p class="card-text mb-1">
+                <span id="nowPlayingCurrent">0:00</span> / <span id="nowPlayingDuration">0:00</span>
+                <span class="ms-3">PPM: <span id="nowPlayingPPM">-</span></span>
+            </p>
+            <div class="d-flex align-items-center gap-2 mb-2">
+                <button class="btn btn-light btn-sm" id="nowPlayingPrev"><i class="bi bi-skip-backward-fill"></i></button>
+                <button class="btn btn-light btn-sm" id="nowPlayingPause"><i class="bi bi-pause-fill"></i></button>
+                <button class="btn btn-light btn-sm" id="nowPlayingSkip"><i class="bi bi-skip-forward-fill"></i></button>
+                <input type="range" id="nowPlayingSeek" value="0" min="0" max="100" style="flex:1">
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <label for="nowPlayingVolume" class="form-label mb-0">Volumen</label>
+                <input type="range" class="form-range custom-range" id="nowPlayingVolume" min="0" max="100" value="100" style="flex:1">
+            </div>
+        </div>
+    </div>
+    \end{verbatim}
+    Muestra información detallada de la canción en reproducción, incluyendo controles de reproducción (anterior, pausa/play, siguiente), barra de progreso y control de volumen. Esta tarjeta está oculta inicialmente y se muestra cuando se reproduce una canción.
+
+    \item \textbf{Contenedor de Recomendaciones:}
+    \begin{verbatim}
+    <div class="row mt-5" id="songRecommendations" style="display:none">
+        <!-- Las recomendaciones de canciones se insertarán aquí -->
+    </div>
+    \end{verbatim}
+    Contenedor donde se mostrarán dinámicamente las recomendaciones de canciones según el PPM actual. Inicialmente está oculto y se rellena mediante JavaScript.
+
+    \item \textbf{Historial de Reproducción:}
+    \begin{verbatim}
+    <div class="position-absolute top-0 end-0 p-3" style="z-index:2000; width:320px;">
+        <div class="card bg-dark text-white shadow-sm" id="historyCard" style="max-height:320px; overflow-y:auto; display:none;">
+            <div class="card-header py-2 px-3" style="font-size:1.1rem; font-weight:bold;">
+                Reproducidas
+            </div>
+            <ul class="list-group list-group-flush" id="historyList" style="background:transparent;"></ul>
+        </div>
+    </div>
+    \end{verbatim}
+    Muestra un panel flotante en la esquina superior derecha con el historial de canciones reproducidas. Tiene una altura máxima y scroll vertical para manejar listas largas. Inicialmente está oculto y se actualiza dinámicamente.
+\end{itemize}
+
+\subsubsection{Integración con JavaScript}
+El archivo HTML proporciona la estructura y los elementos DOM que serán manipulados por \texttt{ppm\_music.js}. Los elementos tienen IDs específicos que son referenciados en el código JavaScript para actualizar la interfaz dinámicamente. Por ejemplo:
+\begin{itemize}
+    \item \texttt{ppmSlider} y \texttt{ppmValue} para el control y visualización de PPM
+    \item \texttt{startSimulation} y \texttt{stopSong} para los botones de control
+    \item \texttt{nowPlayingCard} y sus elementos hijos para la información de reproducción actual
+    \item \texttt{songRecommendations} para las tarjetas de canciones recomendadas
+    \item \texttt{historyCard} y \texttt{historyList} para el historial de reproducción
+\end{itemize}
+
+\subsection{ppm\_music.js}
+El archivo \texttt{ppm\_music.js} es el componente principal de JavaScript que controla toda la lógica de la aplicación. Este script maneja la simulación de PPM (pulsaciones por minuto), la recomendación de canciones basada en el PPM actual, y la reproducción de audio.
+
+\subsubsection{Índice de Funciones}
+A continuación se presenta un índice detallado de todas las funciones implementadas en \texttt{ppm\_music.js}:
+
+\begin{enumerate}
+    \item \textbf{setAudioVolume():} Actualiza el volumen del audio actual según el valor del control deslizante.
+    \item \textbf{startAutoPlaySongs():} Inicia la reproducción automática de canciones basada en el PPM actual.
+    \item \textbf{stopAutoPlaySongs():} Detiene la reproducción automática y limpia los temporizadores.
+    \item \textbf{playNextAutoSong():} Selecciona y reproduce la siguiente canción automáticamente basada en el PPM actual.
+    \item \textbf{playSongAuto(audioUrl):} Reproduce una canción automáticamente y configura su comportamiento al finalizar.
+    \item \textbf{startSimulation():} Inicia la simulación de variaciones de PPM, simulando el ritmo cardíaco durante ejercicio.
+    \item \textbf{stopSimulation():} Detiene la simulación de PPM.
+    \item \textbf{updatePPMDisplay(value):} Actualiza el valor mostrado de PPM en la interfaz.
+    \item \textbf{updateRecommendations(currentPPM):} Actualiza las recomendaciones de canciones basadas en el PPM actual.
+    \item \textbf{playSong(audioUrl, buttonElement):} Maneja la reproducción manual de una canción seleccionada por el usuario.
+    \item \textbf{showStopButton(show):} Muestra u oculta el botón para detener la reproducción.
+    \item \textbf{showNowPlaying(song, audio):} Muestra la información de la canción en reproducción y actualiza la interfaz.
+    \item \textbf{hideNowPlaying():} Oculta la información de la canción en reproducción.
+    \item \textbf{formatTime(seconds):} Formatea el tiempo en segundos a formato MM:SS para la visualización.
+    \item \textbf{addToHistory(song):} Añade una canción al historial de reproducción.
+    \item \textbf{renderHistory():} Actualiza la visualización del historial de reproducción en la interfaz.
+\end{enumerate}
+
+\subsubsection{Detalles de Implementación}
+\begin{itemize}
+    \item \textbf{Gestión de datos de canciones:}
+    \begin{verbatim}
+    // Base de datos de canciones (simulada)
+    const songs = [];
+    
+    // Cargar las canciones desde la base de datos
+    fetch('get_songs.php')
+        .then(response => response.json())
+        .then(data => {
+            if (Array.isArray(data)) {
+                songs.push(...data);
+            }
+        })
+    \end{verbatim}
+    Inicializa un array \texttt{songs} que se llena mediante una petición AJAX a \texttt{get\_songs.php}. Cada canción tiene información como artista, nombre, PPM, año y URL del audio.
+
+    \item \textbf{Control de audio:}
+    \begin{verbatim}
+    function playSong(audioUrl, buttonElement) {
+        // Si se está reproduciendo otra canción, detenerla
+        if (currentAudio && currentAudioUrl !== audioUrl) {
+            currentAudio.pause();
+            currentAudio.currentTime = 0;
+            if (currentAudioButton) {
+                currentAudioButton.innerHTML = '<i class="bi bi-play-fill"></i> Reproducir';
+            }
+            currentAudio = null;
+        }
+        
+        // Si no hay audio o es diferente, crear uno nuevo
+        if (!currentAudio) {
+            currentAudio = new Audio(audioUrl);
+            currentAudioUrl = audioUrl;
+            currentAudioButton = buttonElement;
+            setAudioVolume();
+            currentAudio.play();
+            buttonElement.innerHTML = '<i class="bi bi-pause-fill"></i> Pausar';
+            
+            // Buscar canción por URL
+            const song = songs.find(s => s.audioUrl === audioUrl);
+            if (song) {
+                showNowPlaying(song, currentAudio);
+                addToHistory(song);
+            }
+            
+            // Cuando termine la canción
+            currentAudio.onended = () => {
+                buttonElement.innerHTML = '<i class="bi bi-play-fill"></i> Reproducir';
+                currentAudio = null;
+                hideNowPlaying();
+            };
+        } 
+        // ...
+    }
+    \end{verbatim}
+    Maneja la reproducción de canciones con funciones como \texttt{playSong()}, \texttt{playSongAuto()}, controla el volumen mediante un slider, y gestiona la pausa y detención de la reproducción.
+
+    \item \textbf{Simulación de PPM:}
+    \begin{verbatim}
+    function startSimulation() {
+        let direction = 1;
+        let currentPPM = parseInt(ppmSlider.value);
+        let intensityFactor = 1;
+        
+        simulationInterval = setInterval(() => {
+            // Simular variaciones naturales en el PPM para corredores
+            const baseVariation = Math.random() * 5; // Mayor variación para reflejar ejercicio
+            const variation = baseVariation * intensityFactor;
+            currentPPM += variation * direction;
+            
+            // Cambiar dirección y ajustar intensidad ocasionalmente
+            if (Math.random() < 0.15) {
+                direction *= -1;
+                // Ajustar factor de intensidad basado en el nivel de ejercicio
+                intensityFactor = 0.8 + Math.random() * 0.4; // Varía entre 0.8 y 1.2
+            }
+            
+            // Mantener PPM dentro del rango para corredores (100-180)
+            currentPPM = Math.min(Math.max(currentPPM, 100), 180);
+            
+            ppmSlider.value = Math.round(currentPPM);
+            updatePPMDisplay(currentPPM);
+            updateRecommendations(currentPPM);
+        }, 1000);
+    }
+    \end{verbatim}
+    Implementa \texttt{startSimulation()} y \texttt{stopSimulation()} para simular cambios en el ritmo cardíaco. Varía el PPM de forma natural entre 100-180 PPM, simulando el comportamiento durante ejercicio, y actualiza la interfaz en tiempo real con los valores simulados.
+
+    \item \textbf{Sistema de recomendaciones:}
+    \begin{verbatim}
+    function updateRecommendations(currentPPM) {
+        // Encontrar canciones con PPM similares (±5 PPM para mayor precisión)
+        const matchingSongs = songs
+            .filter(song => Math.abs(song.ppm - currentPPM) <= 5)
+            .sort((a, b) => Math.abs(a.ppm - currentPPM) - Math.abs(b.ppm - currentPPM)) // Ordenar por similitud
+            .slice(0, 3); // Mostrar las 3 canciones más cercanas al PPM actual
+
+        recommendationsContainer.innerHTML = matchingSongs.map(song => `
+            <div class="col-md-4 mb-4">
+                <div class="card song-card text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">${song.name}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">${song.artist}</h6>
+                        <p class="card-text">
+                            Año: ${song.year}<br>
+                            PPM: ${song.ppm}
+                        </p>
+                        <button class="btn btn-outline-light mt-2" onclick="playSong('${song.audioUrl}', this)">
+                            <i class="bi bi-play-fill"></i> Reproducir
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+    \end{verbatim}
+    La función \texttt{updateRecommendations()} encuentra canciones con PPM similar al actual (±5 PPM), ordena las canciones por similitud y muestra las 3 más cercanas, generando tarjetas HTML dinámicamente.
+
+    \item \textbf{Reproducción automática:}
+    \begin{verbatim}
+    function startAutoPlaySongs() {
+        autoPlayActive = true;
+        playNextAutoSong();
+    }
+
+    function playNextAutoSong() {
+        if (!autoPlayActive) return;
+        // Tomar el BPM actual simulado del slider
+        const currentPPM = parseInt(ppmSlider.value);
+        // Buscar canciones similares
+        const matchingSongs = songs
+            .filter(song => Math.abs(song.ppm - currentPPM) <= 5)
+            .sort((a, b) => Math.abs(a.ppm - currentPPM) - Math.abs(b.ppm - currentPPM));
+        if (matchingSongs.length === 0) {
+            // Si no hay ninguna, buscar la más cercana
+            const closest = songs.slice().sort((a, b) => 
+                Math.abs(a.ppm - currentPPM) - Math.abs(b.ppm - currentPPM))[0];
+            if (!closest) return;
+            playSongAuto(closest.audioUrl);
+        } else {
+            // Elegir una aleatoria entre las más cercanas
+            const song = matchingSongs[Math.floor(Math.random() * 
+                Math.min(3, matchingSongs.length))];
+            playSongAuto(song.audioUrl);
+        }
+    }
+    \end{verbatim}
+    Implementa la reproducción automática de canciones basada en el PPM actual durante la simulación, seleccionando canciones con ritmos similares o la más cercana disponible.
+
+    \item \textbf{Historial de reproducción:}
+    \begin{verbatim}
+    function addToHistory(song) {
+        // Evitar duplicados consecutivos
+        if (playedHistory.length > 0 && playedHistory[0].name === song.name) return;
+        
+        // Añadir al principio y limitar a 10 entradas
+        playedHistory.unshift(song);
+        if (playedHistory.length > 10) playedHistory.pop();
+        
+        renderHistory();
+    }
+    \end{verbatim}
+    Mantiene un historial de las últimas 10 canciones reproducidas, evitando duplicados consecutivos y actualizando la visualización en tiempo real.
+\end{itemize}
+
+\subsubsection{Eventos y Listeners}
+El archivo también configura varios event listeners para manejar la interacción del usuario:
+
+\begin{itemize}
+    \item \textbf{Slider de volumen:} Actualiza el volumen del audio en tiempo real.
+    \item \textbf{Slider de PPM:} Actualiza el valor mostrado y las recomendaciones cuando el usuario ajusta el PPM manualmente.
+    \item \textbf{Botón de simulación:} Alterna entre iniciar y detener la simulación de PPM.
+    \item \textbf{Botón de detener:} Detiene la reproducción de la canción actual.
+\end{itemize}
+
+\subsubsection{Flujo de Ejecución}
+El flujo principal de ejecución del script es:
+
+\begin{enumerate}
+    \item Inicialización de variables y carga de datos de canciones desde el servidor.
+    \item Configuración de event listeners para controles de la interfaz.
+    \item Espera de interacción del usuario (ajuste manual de PPM o inicio de simulación).
+    \item Durante la simulación: actualización periódica del PPM, recomendaciones y reproducción automática.
+    \item Mantenimiento del historial de reproducción y visualización de información de la canción actual.
+\end{enumerate}
+
+\subsection{list\_songs.php}
+El archivo \texttt{list\_songs.php} implementa una página web que muestra la lista completa de canciones disponibles en la base de datos. Combina HTML, CSS y PHP para crear una interfaz de tabla con todas las canciones y sus detalles.
+
+\subsubsection{Estructura General}
+\begin{itemize}
+    \item \textbf{Encabezado y Metadatos:}
+    \begin{verbatim}
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Lista de Canciones</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        ...
+    </head>
+    \end{verbatim}
+    Similar a \texttt{index.html}, establece el documento HTML5, idioma español y metadatos básicos.
+
+    \item \textbf{Estilos CSS Personalizados:}
+    \begin{verbatim}
+    <style>
+        body { background: #222; color: #fff; }
+        th, td { vertical-align: middle!important; border: 1px solid #444 !important; }
+        .table thead { background: #333; color: #ff4444; }
+        .table-striped > tbody > tr:nth-of-type(odd) { background-color: #292929; }
+        .table-striped > tbody > tr:nth-of-type(even) { background-color: #232323; }
+        .table-bordered { border: 2px solid #555 !important; }
+        .table thead th { border-bottom: 2px solid #ff4444 !important; font-size: 1.1rem; }
+        .table tbody td { font-size: 1.05rem; color: #f8f8f8; }
+        .table tbody td.song-title { color: #ffe082; font-weight: bold; }
+        .table tbody td.artist { color: #80cbc4; }
+        .table tbody td.id { color: #b39ddb; }
+        .table tbody td.ppm { color: #ffab91; font-weight: bold; }
+        .table-responsive { box-shadow: 0 2px 16px rgba(0,0,0,0.5); border-radius: 10px; overflow: hidden; }
+        .audio-cell audio { background: #111; border-radius: 5px; }
+        .table-hover tbody tr:hover { background-color: #444 !important; }
+        .container { max-width: 950px; }
+    </style>
+    \end{verbatim}
+    Define un tema oscuro para la tabla de canciones, con colores específicos para diferentes tipos de datos (artista, título, PPM, etc.) y efectos visuales como bordes, sombras y estados hover.
+\end{itemize}
+
+\subsubsection{Componentes Principales}
+\begin{itemize}
+    \item \textbf{Encabezado (header):}
+    \begin{verbatim}
+    <header class="bg-dark text-white py-3 mb-4">
+        <div class="container d-flex justify-content-between align-items-center">
+            <h2 class="mb-0">Lista de Canciones</h2>
+            <nav>
+                <a href="ppm_music.html" class="btn btn-outline-light ms-2">Volver al reproductor</a>
+            </nav>
+        </div>
+    </header>
+    \end{verbatim}
+    Crea una barra de navegación superior con el título de la página y un botón para volver al reproductor principal.
+
+    \item \textbf{Tabla de Canciones:}
+    \begin{verbatim}
+    <div class="container">
+        <h3 class="mb-4">Todas las canciones</h3>
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered align-middle" id="songsTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Artista</th>
+                        <th>Nombre</th>
+                        <th>Año</th>
+                        <th>PPM</th>
+                        <th>Audio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Contenido dinámico generado por PHP -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    \end{verbatim}
+    Define la estructura de la tabla con encabezados para cada columna de datos.
+\end{itemize}
+
+\subsubsection{Código PHP para Acceso a Base de Datos}
+\begin{verbatim}
+<?php
+$host = 'localhost';
+$dbname = 'songs_database';
+$user = 'root';
+$pass = '';
+
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $user, $pass);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $stmt = $pdo->query("SELECT artist, name, year, PPM as ppm, audioUrl FROM songs");
+    $songs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch(PDOException $e) {
+    echo '<div class="alert alert-danger">Error de base de datos: ' . 
+         htmlspecialchars($e->getMessage()) . '</div>';
+    $songs = [];
+}
+?>
+\end{verbatim}
+Este bloque PHP:
+\begin{itemize}
+    \item Define los parámetros de conexión a la base de datos MySQL
+    \item Establece una conexión PDO con manejo de errores
+    \item Ejecuta una consulta SQL para obtener todas las canciones
+    \item Almacena los resultados en el array \texttt{\$songs}
+    \item En caso de error, muestra un mensaje y establece un array vacío
+\end{itemize}
+
+\subsubsection{Generación Dinámica de Filas de la Tabla}
+\begin{verbatim}
+<?php foreach ($songs as $idx => $song): ?>
+<tr>
+    <td class="id"><?= $idx + 1 ?></td>
+    <td class="artist"><?= htmlspecialchars($song['artist'] ?? '-') ?></td>
+    <td class="song-title"><?= htmlspecialchars($song['name'] ?? '-') ?></td>
+    <td><?= htmlspecialchars($song['year'] ?? '-') ?></td>
+    <td class="ppm"><?= htmlspecialchars($song['ppm'] ?? '-') ?></td>
+    <td class="audio-cell"><?php if (!empty($song['audioUrl'])): ?>
+        <audio controls src="<?= htmlspecialchars($song['audioUrl']) ?>" style="width:140px;"></audio>
+    <?php else: ?>-
+    <?php endif; ?></td>
+</tr>
+<?php endforeach; ?>
+\end{verbatim}
+Este bloque:
+\begin{itemize}
+    \item Itera sobre el array de canciones obtenido de la base de datos
+    \item Genera una fila de tabla para cada canción
+    \item Aplica clases CSS específicas a cada celda según su tipo de dato
+    \item Utiliza \texttt{htmlspecialchars()} para prevenir ataques XSS
+    \item Incluye un reproductor de audio HTML5 para cada canción que tenga URL de audio
+    \item Maneja casos donde faltan datos con el operador de fusión null (\texttt{??})
+\end{itemize}
+
+\subsection{list\_songs.js}
+El archivo \texttt{list\_songs.js} es una versión alternativa para cargar las canciones en la página \texttt{list\_songs.php} utilizando JavaScript en lugar de PHP directo. Este enfoque permite una mayor flexibilidad y la posibilidad de actualizar la tabla sin recargar la página.
+
+\subsubsection{Estructura General}
+\begin{verbatim}
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('get_songs.php')
+        .then(response => response.json())
+        .then(data => {
+            const tbody = document.querySelector('#songsTable tbody');
+            tbody.innerHTML = '';
+            if (Array.isArray(data)) {
+                data.forEach((song, idx) => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${idx + 1}</td>
+                        <td>${song.artist || '-'}</td>
+                        <td>${song.name || '-'}</td>
+                        <td>${song.year || '-'}</td>
+                        <td>${song.ppm || '-'}</td>
+                        <td>${song.audioUrl ? `<audio controls src='${song.audioUrl}' style='width:140px;'></audio>` : '-'}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } else {
+                tbody.innerHTML = `<tr><td colspan='6'>No se pudieron cargar las canciones.</td></tr>`;
+            }
+        })
+        .catch(err => {
+            const tbody = document.querySelector('#songsTable tbody');
+            tbody.innerHTML = `<tr><td colspan='6'>Error cargando canciones.</td></tr>`;
+        });
+});
+\end{verbatim}
+
+\subsubsection{Análisis del Código}
+\begin{itemize}
+    \item \textbf{Evento DOMContentLoaded:}
+    \begin{verbatim}
+    document.addEventListener('DOMContentLoaded', function() {
+        // Código principal
+    });
+    \end{verbatim}
+    Asegura que el código se ejecute solo después de que el DOM esté completamente cargado, evitando errores por intentar acceder a elementos que aún no existen.
+
+    \item \textbf{Petición Fetch:}
+    \begin{verbatim}
+    fetch('get_songs.php')
+        .then(response => response.json())
+        .then(data => {
+            // Procesamiento de datos
+        })
+        .catch(err => {
+            // Manejo de errores
+        });
+    \end{verbatim}
+    Utiliza la API Fetch para realizar una petición HTTP al endpoint \texttt{get\_songs.php}, que devuelve los datos de las canciones en formato JSON. La respuesta se procesa en cadena usando promesas (\texttt{.then()}).
+
+    \item \textbf{Manipulación del DOM:}
+    \begin{verbatim}
+    const tbody = document.querySelector('#songsTable tbody');
+    tbody.innerHTML = '';
+    \end{verbatim}
+    Obtiene una referencia al elemento \texttt{tbody} de la tabla y limpia su contenido actual.
+
+    \item \textbf{Generación Dinámica de Filas:}
+    \begin{verbatim}
+    if (Array.isArray(data)) {
+        data.forEach((song, idx) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${idx + 1}</td>
+                <td>${song.artist || '-'}</td>
+                <td>${song.name || '-'}</td>
+                <td>${song.year || '-'}</td>
+                <td>${song.ppm || '-'}</td>
+                <td>${song.audioUrl ? `<audio controls src='${song.audioUrl}' style='width:140px;'></audio>` : '-'}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+    \end{verbatim}
+    Verifica que los datos recibidos sean un array, luego itera sobre cada canción creando un elemento \texttt{tr} (fila de tabla) con celdas para cada propiedad. Utiliza el operador OR lógico (\texttt{||}) para manejar valores faltantes y un operador ternario para el reproductor de audio. Finalmente, añade cada fila al \texttt{tbody}.
+
+    \item \textbf{Manejo de Errores:}
+    \begin{verbatim}
+    } else {
+        tbody.innerHTML = `<tr><td colspan='6'>No se pudieron cargar las canciones.</td></tr>`;
+    }
+    // ...
+    .catch(err => {
+        const tbody = document.querySelector('#songsTable tbody');
+        tbody.innerHTML = `<tr><td colspan='6'>Error cargando canciones.</td></tr>`;
+    });
+    \end{verbatim}
+    Maneja dos tipos de errores: cuando los datos no son un array (respuesta inesperada) y cuando ocurre un error en la petición fetch. En ambos casos, muestra un mensaje de error en la tabla.
+\end{itemize}
+
+\subsubsection{Ventajas de este Enfoque}
+\begin{itemize}
+    \item \textbf{Separación de responsabilidades:} El backend (\texttt{get\_songs.php}) solo proporciona datos en formato JSON, mientras que el frontend (\texttt{list\_songs.js}) se encarga de la presentación.
+    \item \textbf{Experiencia de usuario mejorada:} Permite implementar actualizaciones en tiempo real o filtrado sin recargar la página.
+    \item \textbf{Mantenibilidad:} Facilita la modificación independiente de la lógica de datos y la presentación.
+    \item \textbf{Reutilización:} El mismo endpoint \texttt{get\_songs.php} puede ser utilizado por diferentes interfaces.
+\end{itemize}
+
+% ===============================
+% 5. Recomendaciones para el Programador
+% ===============================
+\section{Recomendaciones para el Programador}
+\begin{itemize}
+    \item Mantener la estructura de carpetas organizada.
+    \item Documentar cambios en los archivos principales.
+    \item Hacer respaldos periódicos de la base de datos.
+    \item Seguir buenas prácticas de seguridad en PHP y JS.
+    \item Probar el sistema en diferentes navegadores y dispositivos.
+\end{itemize}
+
+% ===============================
+% 6. Contacto y Créditos
+% ===============================
+\section{Contacto y Créditos}
+Desarrollado por: Santiago Ibarra, Agustin Colman, Carlos Insaurralde, Gabriel Beneitez.\\
+Curso: 7°2 -- Año 2025.
+
+\end{document}
