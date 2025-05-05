@@ -5,7 +5,7 @@
 \usepackage{graphicx}
 \usepackage{geometry}
 \usepackage{xcolor} % Added package for \textcolor command
-\usepackage[colorlinks=false, linkcolor=black, urlcolor=black]{hyperref}
+\usepackage[colorlinks=true, linkcolor=black, urlcolor=black]{hyperref}
 \geometry{top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm}
 
 \begin{document}
@@ -256,12 +256,70 @@ Para ver todas las canciones disponibles:
     \item Para volver al reproductor principal, utiliza el botón de navegación del navegador o haz clic en el título
 \end{enumerate}
 
-% Aquí iría una imagen del listado completo
-% \begin{figure}[h]
-%     \centering
-%     \includegraphics[width=0.8\textwidth]{imagenes/listado_completo.png}
-%     \caption{Listado completo de canciones}
-% \end{figure}
+\subsubsection{Búsqueda y Filtros}
+El listado de canciones ofrece varias opciones para encontrar rápidamente la música que deseas:
+
+\begin{enumerate}
+    \item \textbf{Búsqueda por texto:} Escribe en el campo de búsqueda para filtrar canciones por título o artista
+    \item \textbf{Filtro por PPM:} Selecciona un rango de PPM del menú desplegable:
+    \begin{itemize}
+        \item Bajo (100-120 PPM)
+        \item Medio (121-150 PPM)
+        \item Alto (151-180 PPM)
+    \end{itemize}
+    \item \textbf{Ordenamiento:} Ordena las canciones por diferentes criterios:
+    \begin{itemize}
+        \item Título (A-Z o Z-A)
+        \item Artista (A-Z o Z-A)
+        \item PPM (Menor a Mayor o Mayor a Menor)
+        \item Año (Antiguo a Reciente o Reciente a Antiguo)
+    \end{itemize}
+    \item \textbf{Botón Resetear:} Elimina todos los filtros aplicados y muestra nuevamente todas las canciones
+\end{enumerate}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{imagenes/barra_canciones.png}
+    \caption{Barra de filtros}
+\end{figure}
+
+
+\subsubsection{Reproducción de Canciones}
+Para reproducir una canción desde el listado:
+
+\begin{enumerate}
+    \item Localiza la canción deseada en la tabla
+    \item Haz clic en el botón de reproducción (ícono de play) junto a la canción
+    \item Para detener la reproducción, haz clic en el botón de detener (ícono de stop) que aparece
+\end{enumerate}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{imagenes/reproduccion_manual.png}
+    \caption{Reproducción manual de una canción}
+\end{figure}
+
+\subsubsection{Opciones Adicionales}
+Cada canción cuenta con un menú de opciones adicionales:
+
+\begin{enumerate}
+    \item Haz clic en el botón de tres puntos junto a la canción
+    \item Se abrirá un menú con opciones como:
+    \begin{itemize}
+        \item Añadir a playlist
+        \item Descargar
+        \item Compartir
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection{Navegación entre Páginas}
+Cuando hay muchas canciones, el listado se divide en páginas para facilitar la navegación:
+
+\begin{enumerate}
+    \item En la parte inferior de la tabla encontrarás botones de paginación
+    \item Haz clic en los números para ir a una página específica
+    \item Utiliza los botones ``Anterior" y ``Siguiente" para navegar secuencialmente
+    \item La página actual se muestra resaltada
+\end{enumerate}
 
 % ===============================
 % 6. Preguntas Frecuentes
