@@ -229,10 +229,15 @@
                 </div>
                 <div class="col-md-3">
                     <select class="form-select bg-dark text-white border-0" id="sortBy">
-                        <option value="title">Ordenar por Título</option>
-                        <option value="artist">Ordenar por Artista</option>
-                        <option value="ppm">Ordenar por PPM</option>
-                        <option value="year">Ordenar por Año</option>
+                        <option value="">Ordenar por...</option>
+                        <option value="title_asc">Título (A-Z)</option>
+                        <option value="title_desc">Título (Z-A)</option>
+                        <option value="artist_asc">Artista (A-Z)</option>
+                        <option value="artist_desc">Artista (Z-A)</option>
+                        <option value="ppm_asc">PPM (Menor a Mayor)</option>
+                        <option value="ppm_desc">PPM (Mayor a Menor)</option>
+                        <option value="year_asc">Año (Antiguo a Reciente)</option>
+                        <option value="year_desc">Año (Reciente a Antiguo)</option>
                     </select>
                 </div>
                 <div class="col-md-2">
@@ -269,9 +274,6 @@
                             <button class="btn-action stop-btn" onclick="stopSong(this)" style="display: none;">
                                 <i class="bi bi-stop-fill"></i>
                             </button>
-                            <button class="btn-action" onclick="toggleFavorite(this)">
-                                <i class="bi bi-heart"></i>
-                            </button>
                             <button class="btn-action" onclick="showOptions(this)">
                                 <i class="bi bi-three-dots"></i>
                             </button>
@@ -288,9 +290,6 @@
                             </button>
                             <button class="btn-action stop-btn" onclick="stopSong(this)" style="display: none;">
                                 <i class="bi bi-stop-fill"></i>
-                            </button>
-                            <button class="btn-action" onclick="toggleFavorite(this)">
-                                <i class="bi bi-heart"></i>
                             </button>
                             <button class="btn-action" onclick="showOptions(this)">
                                 <i class="bi bi-three-dots"></i>
@@ -309,9 +308,6 @@
                             <button class="btn-action stop-btn" onclick="stopSong(this)" style="display: none;">
                                 <i class="bi bi-stop-fill"></i>
                             </button>
-                            <button class="btn-action" onclick="toggleFavorite(this)">
-                                <i class="bi bi-heart"></i>
-                            </button>
                             <button class="btn-action" onclick="showOptions(this)">
                                 <i class="bi bi-three-dots"></i>
                             </button>
@@ -328,9 +324,6 @@
                             </button>
                             <button class="btn-action stop-btn" onclick="stopSong(this)" style="display: none;">
                                 <i class="bi bi-stop-fill"></i>
-                            </button>
-                            <button class="btn-action" onclick="toggleFavorite(this)">
-                                <i class="bi bi-heart"></i>
                             </button>
                             <button class="btn-action" onclick="showOptions(this)">
                                 <i class="bi bi-three-dots"></i>
@@ -349,9 +342,6 @@
                             <button class="btn-action stop-btn" onclick="stopSong(this)" style="display: none;">
                                 <i class="bi bi-stop-fill"></i>
                             </button>
-                            <button class="btn-action" onclick="toggleFavorite(this)">
-                                <i class="bi bi-heart"></i>
-                            </button>
                             <button class="btn-action" onclick="showOptions(this)">
                                 <i class="bi bi-three-dots"></i>
                             </button>
@@ -368,9 +358,6 @@
                             </button>
                             <button class="btn-action stop-btn" onclick="stopSong(this)" style="display: none;">
                                 <i class="bi bi-stop-fill"></i>
-                            </button>
-                            <button class="btn-action" onclick="toggleFavorite(this)">
-                                <i class="bi bi-heart"></i>
                             </button>
                             <button class="btn-action" onclick="showOptions(this)">
                                 <i class="bi bi-three-dots"></i>
@@ -389,9 +376,6 @@
                             <button class="btn-action stop-btn" onclick="stopSong(this)" style="display: none;">
                                 <i class="bi bi-stop-fill"></i>
                             </button>
-                            <button class="btn-action" onclick="toggleFavorite(this)">
-                                <i class="bi bi-heart"></i>
-                            </button>
                             <button class="btn-action" onclick="showOptions(this)">
                                 <i class="bi bi-three-dots"></i>
                             </button>
@@ -408,9 +392,6 @@
                             </button>
                             <button class="btn-action stop-btn" onclick="stopSong(this)" style="display: none;">
                                 <i class="bi bi-stop-fill"></i>
-                            </button>
-                            <button class="btn-action" onclick="toggleFavorite(this)">
-                                <i class="bi bi-heart"></i>
                             </button>
                             <button class="btn-action" onclick="showOptions(this)">
                                 <i class="bi bi-three-dots"></i>
@@ -429,9 +410,6 @@
                             <button class="btn-action stop-btn" onclick="stopSong(this)" style="display: none;">
                                 <i class="bi bi-stop-fill"></i>
                             </button>
-                            <button class="btn-action" onclick="toggleFavorite(this)">
-                                <i class="bi bi-heart"></i>
-                            </button>
                             <button class="btn-action" onclick="showOptions(this)">
                                 <i class="bi bi-three-dots"></i>
                             </button>
@@ -449,9 +427,6 @@
                             <button class="btn-action stop-btn" onclick="stopSong(this)" style="display: none;">
                                 <i class="bi bi-stop-fill"></i>
                             </button>
-                            <button class="btn-action" onclick="toggleFavorite(this)">
-                                <i class="bi bi-heart"></i>
-                            </button>
                             <button class="btn-action" onclick="showOptions(this)">
                                 <i class="bi bi-three-dots"></i>
                             </button>
@@ -462,16 +437,16 @@
         </div>
         
         <!-- Paginación -->
-        <div class="d-flex justify-content-center mt-4">
+        <div class="d-flex justify-content-center mt-4" id="paginationContainer">
             <nav aria-label="Navegación de páginas">
-                <ul class="pagination">
-                    <li class="page-item disabled">
+                <ul class="pagination" id="pagination">
+                    <li class="page-item disabled" id="prevPage">
                         <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
                     </li>
-                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item">
+                    <li class="page-item active"><a class="page-link" href="#" data-page="1">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#" data-page="2">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#" data-page="3">3</a></li>
+                    <li class="page-item" id="nextPage">
                         <a class="page-link" href="#">Siguiente</a>
                     </li>
                 </ul>
@@ -481,6 +456,11 @@
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // Variables globales para la paginación
+        let currentPage = 1;
+        const itemsPerPage = 10; // Número de canciones por página
+        let filteredSongsGlobal = []; // Almacena las canciones filtradas globalmente
+        
         // Cargar las canciones desde la base de datos
         document.addEventListener('DOMContentLoaded', function() {
             fetch('get_songs.php')
@@ -488,8 +468,11 @@
                 .then(songs => {
                     if (Array.isArray(songs)) {
                         window.allSongs = songs; // Guardar todas las canciones para la búsqueda
+                        filteredSongsGlobal = [...songs]; // Inicializar canciones filtradas
                         displaySongs(songs);
                         setupSearch();
+                        setupFilters();
+                        setupPagination();
                     } else {
                         console.error('Respuesta inesperada:', songs);
                         document.getElementById('songsList').innerHTML = `
@@ -513,6 +496,9 @@
         function displaySongs(songs) {
             const songsListElement = document.getElementById('songsList');
             
+            // Guardar las canciones filtradas globalmente
+            filteredSongsGlobal = [...songs];
+            
             // Limpiar cualquier contenido de ejemplo
             songsListElement.innerHTML = '';
             
@@ -522,11 +508,21 @@
                         <td colspan="5" class="text-center">No hay canciones disponibles</td>
                     </tr>
                 `;
+                // Ocultar paginación si no hay resultados
+                document.getElementById('paginationContainer').style.display = 'none';
                 return;
             }
             
+            // Mostrar paginación si hay resultados
+            document.getElementById('paginationContainer').style.display = 'flex';
+            
+            // Calcular el rango de canciones a mostrar según la página actual
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = Math.min(startIndex + itemsPerPage, songs.length);
+            const songsToDisplay = songs.slice(startIndex, endIndex);
+            
             // Crear filas para cada canción
-            songs.forEach(song => {
+            songsToDisplay.forEach(song => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td class="song-title">${song.name}</td>
@@ -540,9 +536,6 @@
                         <button class="btn-action stop-btn" onclick="stopSong(this)" style="display: none;">
                             <i class="bi bi-stop-fill"></i>
                         </button>
-                        <button class="btn-action" onclick="toggleFavorite(this)">
-                            <i class="bi bi-heart"></i>
-                        </button>
                         <button class="btn-action" onclick="showOptions(this)">
                             <i class="bi bi-three-dots"></i>
                         </button>
@@ -550,8 +543,11 @@
                 `;
                 songsListElement.appendChild(row);
             });
+            
+            // Actualizar la paginación
+            updatePagination(songs.length);
         }
-
+        
         // Función para reproducir una canción
         function playSong(audioUrl, button) {
             // Detener cualquier audio que se esté reproduciendo
@@ -597,27 +593,6 @@
             // Restaurar botones
             button.style.display = 'none';
             button.previousElementSibling.style.display = 'inline-flex';
-        }
-        
-        // Función para marcar/desmarcar como favorito
-        function toggleFavorite(button) {
-            // Alternar entre corazón vacío y lleno
-            const icon = button.querySelector('i');
-            if (icon.classList.contains('bi-heart')) {
-                icon.classList.remove('bi-heart');
-                icon.classList.add('bi-heart-fill');
-                icon.style.color = '#ff4444';
-                
-                // Aquí se podría implementar la lógica para guardar en favoritos
-                // Por ejemplo, usando localStorage o enviando a la base de datos
-                showToast('Canción añadida a favoritos');
-            } else {
-                icon.classList.remove('bi-heart-fill');
-                icon.classList.add('bi-heart');
-                icon.style.color = '';
-                
-                showToast('Canción eliminada de favoritos');
-            }
         }
         
         // Función para mostrar opciones adicionales
@@ -722,24 +697,229 @@
             const searchInput = document.getElementById('searchInput');
             if (searchInput) {
                 searchInput.addEventListener('input', function() {
-                    const searchTerm = this.value.toLowerCase();
-                    
-                    if (!window.allSongs) return;
-                    
-                    if (searchTerm.trim() === '') {
-                        // Si la búsqueda está vacía, mostrar todas las canciones
-                        displaySongs(window.allSongs);
-                    } else {
-                        // Filtrar canciones que coincidan con el término de búsqueda
-                        const filteredSongs = window.allSongs.filter(song => 
-                            song.name.toLowerCase().includes(searchTerm) || 
-                            song.artist.toLowerCase().includes(searchTerm)
-                        );
-                        
-                        displaySongs(filteredSongs);
-                    }
+                    applyFilters();
                 });
             }
+        }
+        
+        // Configurar los filtros
+        function setupFilters() {
+            const filterPPM = document.getElementById('filterPPM');
+            const sortBy = document.getElementById('sortBy');
+            const resetFilters = document.getElementById('resetFilters');
+            
+            if (filterPPM) {
+                filterPPM.addEventListener('change', function() {
+                    applyFilters();
+                });
+            }
+            
+            if (sortBy) {
+                sortBy.addEventListener('change', function() {
+                    applyFilters();
+                });
+            }
+            
+            if (resetFilters) {
+                resetFilters.addEventListener('click', function() {
+                    // Resetear todos los filtros a sus valores por defecto
+                    document.getElementById('searchInput').value = '';
+                    document.getElementById('filterPPM').value = '';
+                    document.getElementById('sortBy').value = '';
+                    
+                    // Mostrar todas las canciones
+                    if (window.allSongs) {
+                        displaySongs(window.allSongs);
+                    }
+                    
+                    // Mostrar notificación
+                    showToast('Filtros reseteados');
+                });
+            }
+        }
+        
+        // Configurar la paginación
+        function setupPagination() {
+            // Agregar event listeners a los botones de paginación
+            document.querySelectorAll('#pagination .page-item:not(#prevPage):not(#nextPage)').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const page = parseInt(this.querySelector('a').getAttribute('data-page'));
+                    goToPage(page);
+                });
+            });
+            
+            // Botón anterior
+            document.getElementById('prevPage').addEventListener('click', function(e) {
+                e.preventDefault();
+                if (!this.classList.contains('disabled')) {
+                    goToPage(currentPage - 1);
+                }
+            });
+            
+            // Botón siguiente
+            document.getElementById('nextPage').addEventListener('click', function(e) {
+                e.preventDefault();
+                if (!this.classList.contains('disabled')) {
+                    goToPage(currentPage + 1);
+                }
+            });
+        }
+        
+        // Actualizar la paginación basada en el número total de elementos
+        function updatePagination(totalItems) {
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            const pagination = document.getElementById('pagination');
+            
+            // Ocultar paginación si solo hay una página
+            if (totalPages <= 1) {
+                document.getElementById('paginationContainer').style.display = 'none';
+                return;
+            } else {
+                document.getElementById('paginationContainer').style.display = 'flex';
+            }
+            
+            // Actualizar estado del botón anterior
+            const prevPageItem = document.getElementById('prevPage');
+            if (currentPage === 1) {
+                prevPageItem.classList.add('disabled');
+                prevPageItem.querySelector('a').setAttribute('aria-disabled', 'true');
+            } else {
+                prevPageItem.classList.remove('disabled');
+                prevPageItem.querySelector('a').setAttribute('aria-disabled', 'false');
+            }
+            
+            // Actualizar estado del botón siguiente
+            const nextPageItem = document.getElementById('nextPage');
+            if (currentPage === totalPages) {
+                nextPageItem.classList.add('disabled');
+                nextPageItem.querySelector('a').setAttribute('aria-disabled', 'true');
+            } else {
+                nextPageItem.classList.remove('disabled');
+                nextPageItem.querySelector('a').setAttribute('aria-disabled', 'false');
+            }
+            
+            // Generar los números de página
+            const pageItems = [];
+            
+            // Determinar el rango de páginas a mostrar (siempre mostrar 3 páginas si es posible)
+            let startPage = Math.max(1, currentPage - 1);
+            let endPage = Math.min(totalPages, startPage + 2);
+            
+            // Ajustar si estamos en las últimas páginas
+            if (endPage - startPage < 2) {
+                startPage = Math.max(1, endPage - 2);
+            }
+            
+            // Crear elementos de página
+            for (let i = startPage; i <= endPage; i++) {
+                const isActive = i === currentPage;
+                pageItems.push(`
+                    <li class="page-item ${isActive ? 'active' : ''}">
+                        <a class="page-link" href="#" data-page="${i}">${i}</a>
+                    </li>
+                `);
+            }
+            
+            // Actualizar el HTML de la paginación
+            pagination.innerHTML = `
+                <li class="page-item ${currentPage === 1 ? 'disabled' : ''}" id="prevPage">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="${currentPage === 1}">Anterior</a>
+                </li>
+                ${pageItems.join('')}
+                <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}" id="nextPage">
+                    <a class="page-link" href="#">Siguiente</a>
+                </li>
+            `;
+            
+            // Volver a configurar los event listeners
+            setupPagination();
+        }
+        
+        // Ir a una página específica
+        function goToPage(page) {
+            currentPage = page;
+            displaySongs(filteredSongsGlobal);
+            
+            // Desplazarse al principio de la tabla
+            document.querySelector('.songs-table').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Aplicar todos los filtros y ordenamiento
+        function applyFilters() {
+            if (!window.allSongs) return;
+            
+            let filteredSongs = [...window.allSongs];
+            
+            // Aplicar filtro de búsqueda por texto
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            if (searchTerm !== '') {
+                filteredSongs = filteredSongs.filter(song => 
+                    (song.name && song.name.toLowerCase().includes(searchTerm)) || 
+                    (song.artist && song.artist.toLowerCase().includes(searchTerm))
+                );
+            }
+            
+            // Aplicar filtro por PPM
+            const ppmFilter = document.getElementById('filterPPM').value;
+            if (ppmFilter !== '') {
+                switch (ppmFilter) {
+                    case 'low':
+                        filteredSongs = filteredSongs.filter(song => song.ppm >= 100 && song.ppm <= 120);
+                        break;
+                    case 'medium':
+                        filteredSongs = filteredSongs.filter(song => song.ppm > 120 && song.ppm <= 150);
+                        break;
+                    case 'high':
+                        filteredSongs = filteredSongs.filter(song => song.ppm > 150 && song.ppm <= 180);
+                        break;
+                }
+            }
+            
+            // Aplicar ordenamiento
+            const sortOption = document.getElementById('sortBy').value;
+            if (sortOption !== '') {
+                switch (sortOption) {
+                    case 'title_asc':
+                        filteredSongs.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+                        break;
+                    case 'title_desc':
+                        filteredSongs.sort((a, b) => (b.name || '').localeCompare(a.name || ''));
+                        break;
+                    case 'artist_asc':
+                        filteredSongs.sort((a, b) => (a.artist || '').localeCompare(b.artist || ''));
+                        break;
+                    case 'artist_desc':
+                        filteredSongs.sort((a, b) => (b.artist || '').localeCompare(a.artist || ''));
+                        break;
+                    case 'ppm_asc':
+                        filteredSongs.sort((a, b) => (a.ppm || 0) - (b.ppm || 0));
+                        break;
+                    case 'ppm_desc':
+                        filteredSongs.sort((a, b) => (b.ppm || 0) - (a.ppm || 0));
+                        break;
+                    case 'year_asc':
+                        filteredSongs.sort((a, b) => {
+                            const yearA = a.year || 0;
+                            const yearB = b.year || 0;
+                            return yearA - yearB;
+                        });
+                        break;
+                    case 'year_desc':
+                        filteredSongs.sort((a, b) => {
+                            const yearA = a.year || 0;
+                            const yearB = b.year || 0;
+                            return yearB - yearA;
+                        });
+                        break;
+                }
+            }
+            
+            // Resetear a la primera página cuando se aplican filtros
+            currentPage = 1;
+            
+            // Mostrar las canciones filtradas
+            displaySongs(filteredSongs);
         }
     </script>
 </body>
