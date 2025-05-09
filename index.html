@@ -17,12 +17,10 @@
                 <a href="list_songs.php" class="btn btn-outline-light me-2">
                     <i class="bi bi-music-note-list me-2"></i>Listado
                 </a>
-                <a href="analyze.html" class="btn btn-outline-light">
-                    <i class="bi bi-soundwave me-2"></i>Analizador
-                </a>
-            </div>
-            <div class="mt-2">
-                <a href="list_songs.php" class="btn btn-outline-light">Mostrar canciones</a>
+
+                <button id="adminLoginBtn" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#adminLoginModal">
+                    <i class="bi bi-shield-lock me-2"></i>Administrador
+                </button>
             </div>
         </div>
     </header>
@@ -47,6 +45,9 @@
             </div>
             <button class="btn btn-danger mt-4" id="startSimulation">
                 <i class="bi bi-play-fill me-1"></i> Iniciar Simulación
+            </button>
+            <button class="btn btn-secondary mt-2 ms-2" id="stopSong" style="display:none; border-radius: 25px;">
+                <i class="bi bi-stop-fill"></i> Detener Canción
             </button>
         </div>
 
@@ -80,7 +81,9 @@
             </div>
         </div>
 
-        <!-- Se ha eliminado la sección de recomendaciones de canciones -->
+        <div class="row mt-5 g-4" id="songRecommendations" style="display:none">
+            <!-- Las recomendaciones de canciones se insertarán aquí -->
+        </div>
 
         <!-- Lista de canciones reproducidas anteriormente -->
         <div class="position-absolute top-0 end-0 p-3" style="z-index:2000; width:320px;">
@@ -94,7 +97,101 @@
         </div>
     </div>
 
+    <!-- Modal de Login para Administrador -->
+    <div class="modal fade" id="adminLoginModal" tabindex="-1" aria-labelledby="adminLoginModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark text-white">
+                <div class="modal-header border-bottom border-secondary">
+                    <h5 class="modal-title" id="adminLoginModalLabel">Acceso Administrador</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="adminLoginForm">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Usuario</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <div class="alert alert-danger d-none" id="loginError"></div>
+                    </form>
+                </div>
+                <div class="modal-footer border-top border-secondary">
+                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="loginSubmitBtn">Iniciar Sesión</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast para notificaciones -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header bg-dark text-white">
+                <strong class="me-auto">Notificación</strong>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body bg-dark text-white" id="toastMessage">
+                Mensaje de notificación
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="ppm_music.js"></script>
+    <script>
+        // Manejar el envío del formulario de login
+        document.getElementById('loginSubmitBtn').addEventListener('click', function() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const loginError = document.getElementById('loginError');
+            
+            // Validar que se hayan ingresado credenciales
+            if (!username || !password) {
+                loginError.textContent = 'Por favor, ingrese usuario y contraseña';
+                loginError.classList.remove('d-none');
+                return;
+            }
+            
+            // Ocultar mensaje de error previo
+            loginError.classList.add('d-none');
+            
+            // Enviar solicitud de login
+            fetch('login.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Redirigir a la página de administración
+                    window.location.href = 'admin.php';
+                } else {
+                    // Mostrar mensaje de error
+                    loginError.textContent = data.message || 'Error al iniciar sesión';
+                    loginError.classList.remove('d-none');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                loginError.textContent = 'Error de conexión. Intente nuevamente.';
+                loginError.classList.remove('d-none');
+            });
+        });
+        
+        // Función para mostrar notificaciones
+        function showToast(message) {
+            const toastEl = document.getElementById('liveToast');
+            document.getElementById('toastMessage').textContent = message;
+            
+            const toast = new bootstrap.Toast(toastEl);
+            toast.show();
+        }
+    </script>
 </body>
 </html>

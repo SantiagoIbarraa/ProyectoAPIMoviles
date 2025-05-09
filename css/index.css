@@ -1,0 +1,246 @@
+/* Estilos base */
+body {
+    background: #222;
+    color: #fff;
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Header y navegación */
+header {
+    border-bottom: 2px solid #ff4444;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Estilos para el display PPM */
+.ppm-display {
+    font-size: 5rem;
+    font-weight: bold;
+    color: #ff4444;
+    text-shadow: 0 0 15px rgba(255, 68, 68, 0.6);
+    font-family: 'Arial', sans-serif;
+    letter-spacing: -1px;
+}
+
+.heart-icon {
+    animation: pulse 1.2s ease infinite;
+    margin-right: 8px;
+    display: inline-block;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* Tarjeta de canción */
+.song-card {
+    background: #292929;
+    border: none;
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    border-left: 4px solid #ff4444;
+}
+
+.song-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.6);
+}
+
+.song-card .card-title {
+    color: #ffe082; 
+    font-weight: bold;
+    font-size: 1.3rem;
+}
+
+.song-card .card-subtitle {
+    color: #80cbc4 !important;
+    font-size: 1.1rem;
+}
+
+/* Slider container */
+.slider-container {
+    width: 100%;
+    max-width: 500px;
+    margin: 2rem auto;
+    position: relative;
+    padding: 2rem 0 0.5rem;
+}
+
+.slider-container:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(255, 68, 68, 0.5), transparent);
+}
+
+/* Custom range slider */
+.custom-range {
+    height: 10px;
+    border-radius: 5px;
+    background: #333;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.custom-range::-webkit-slider-thumb {
+    width: 24px;
+    height: 24px;
+    background: #ff4444;
+    box-shadow: 0 0 10px rgba(255, 68, 68, 0.7);
+    cursor: pointer;
+}
+
+.custom-range::-webkit-slider-runnable-track {
+    height: 10px;
+    background: #333;
+    border-radius: 5px;
+}
+
+/* Botones */
+.btn-danger {
+    background: #ff4444;
+    border: none;
+    box-shadow: 0 4px 12px rgba(255, 68, 68, 0.4);
+    transition: all 0.3s ease;
+    border-radius: 25px;
+    padding: 0.6rem 2rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.btn-danger:hover {
+    background: #ff2020;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(255, 68, 68, 0.5);
+}
+
+.btn-outline-light {
+    border-radius: 20px;
+    padding: 0.4rem 1.5rem;
+    font-weight: 500;
+    border-color: rgba(255, 255, 255, 0.6);
+    transition: all 0.3s ease;
+}
+
+.btn-outline-light:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Controles de reproducción */
+.btn-player {
+    background: #333;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.btn-player:hover {
+    background: #ff4444;
+    transform: scale(1.1);
+}
+
+/* Progress bar */
+#nowPlayingSeek {
+    height: 6px;
+    border-radius: 3px;
+    background: #333;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+#nowPlayingSeek::-webkit-slider-thumb {
+    width: 16px;
+    height: 16px;
+    background: #ff4444;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* Volumen */
+#nowPlayingVolume {
+    height: 6px;
+}
+
+#nowPlayingVolume::-webkit-slider-thumb {
+    background: #80cbc4;
+}
+
+/* Historia de canciones */
+#historyCard {
+    background: #292929 !important;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    border-top: 3px solid #b39ddb;
+}
+
+#historyCard .card-header {
+    background: rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: #b39ddb;
+}
+
+/* Recomendaciones */
+#songRecommendations .card {
+    background: #292929;
+    border: none;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    border-bottom: 3px solid #80cbc4;
+}
+
+#songRecommendations .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Contenedor principal */
+.main-container {
+    max-width: 950px;
+    margin: 0 auto;
+}
+
+/* Efecto adicional para el título principal */
+.main-title {
+    position: relative;
+    display: inline-block;
+}
+
+.main-title:after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: #ff4444;
+    border-radius: 3px;
+}
+
+/* Detalles de tiempo y PPM */
+.song-details {
+    font-size: 1.1rem;
+    color: #f8f8f8;
+}
+
+.song-details .ppm-value {
+    color: #ffab91;
+    font-weight: bold;
+}
+
+.song-details .time-value {
+    font-family: monospace;
+    letter-spacing: 1px;
+}
