@@ -1,3 +1,13 @@
+<?php
+session_start();
+
+// Verificar si el usuario está autenticado como administrador
+if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+    // Si no está autenticado, redirigir a la página principal
+    header('Location: index.html');
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -17,8 +27,11 @@
                 <a href="index.html" class="btn btn-outline-light me-2">
                     <i class="bi bi-music-player me-2"></i>Ir al Reproductor
                 </a>
-                <a href="list_songs.php" class="btn btn-outline-light">
+                <a href="list_songs.php" class="btn btn-outline-light me-2">
                     <i class="bi bi-music-note-list me-2"></i>Ver Canciones
+                </a>
+                <a href="login.php?logout=1" class="btn btn-outline-danger">
+                    <i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión
                 </a>
             </div>
         </div>

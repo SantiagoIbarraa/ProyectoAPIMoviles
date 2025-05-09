@@ -1,0 +1,261 @@
+/* Estilos base */
+body {
+    background: #222;
+    color: #fff;
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Header y navegación */
+header {
+    border-bottom: 2px solid #ff4444;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Botones */
+.btn-danger {
+    background: #ff4444;
+    border: none;
+    box-shadow: 0 4px 12px rgba(255, 68, 68, 0.4);
+    transition: all 0.3s ease;
+    border-radius: 25px;
+    padding: 0.6rem 2rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.btn-danger:hover {
+    background: #ff2020;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(255, 68, 68, 0.5);
+}
+
+.btn-outline-light {
+    border-radius: 20px;
+    padding: 0.4rem 1.5rem;
+    font-weight: 500;
+    border-color: rgba(255, 255, 255, 0.6);
+    transition: all 0.3s ease;
+}
+
+.btn-outline-light:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Tabla de canciones */
+.songs-table {
+    background: rgba(41, 41, 41, 0.7);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.songs-table th {
+    background: rgba(0, 0, 0, 0.2);
+    color: #ff4444;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: none;
+    padding: 15px;
+}
+
+.songs-table td {
+    padding: 12px 15px;
+    border-color: rgba(255, 255, 255, 0.05);
+    vertical-align: middle;
+}
+
+.songs-table tbody tr {
+    transition: all 0.2s ease;
+}
+
+.songs-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.song-title {
+    color: #ffe082;
+    font-weight: 600;
+}
+
+.song-artist {
+    color: #80cbc4;
+}
+
+.song-ppm {
+    color: #ffab91;
+    font-weight: bold;
+}
+
+.song-year {
+    opacity: 0.8;
+}
+
+/* Botones de acción */
+.btn-action {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: none;
+    transition: all 0.2s ease;
+    margin-right: 5px;
+}
+
+.btn-action:hover {
+    background: #ff4444;
+    transform: scale(1.1);
+}
+
+/* Contenedor principal */
+.main-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Título principal */
+.page-title {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 30px;
+}
+
+.page-title:after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: #ff4444;
+    border-radius: 3px;
+}
+
+/* Filtros y búsqueda */
+.filters-container {
+    background: rgba(41, 41, 41, 0.7);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.form-control {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.form-control:focus {
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+    border-color: rgba(255, 68, 68, 0.5);
+    box-shadow: 0 0 0 0.25rem rgba(255, 68, 68, 0.25);
+}
+
+/* Badges/Etiquetas */
+.badge-ppm {
+    background: linear-gradient(135deg, #ff4444, #ff8a80);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+/* Estilos adicionales para las nuevas funcionalidades */
+.toast-notification {
+    min-width: 300px;
+}
+
+.options-menu .list-group-item {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.options-menu .list-group-item:hover {
+    background-color: #333 !important;
+}
+
+/* Estilos para los tooltips de características avanzadas */
+.song-row {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.song-row:hover {
+    background-color: #252525;
+}
+
+.tooltip {
+    opacity: 1;
+}
+
+.song-tooltip .tooltip-inner {
+    max-width: 300px;
+    padding: 15px;
+    background-color: #252525;
+    border: 1px solid #444;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    text-align: left;
+    font-size: 0.9rem;
+}
+
+.song-tooltip .tooltip-arrow::before {
+    border-left-color: #444;
+}
+
+/* Estilos para las nuevas características avanzadas */
+.advanced-features {
+    background-color: #252525;
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 15px;
+}
+
+.advanced-features h5 {
+    color: #ff4444;
+    margin-bottom: 15px;
+}
+
+/* Estilos para el formulario de agregar canción */
+.add-song-form {
+    background: rgba(41, 41, 41, 0.7);
+    border-radius: 10px;
+    padding: 25px;
+    margin-bottom: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.form-label {
+    color: #ff4444;
+    font-weight: 600;
+}
+
+.form-range::-webkit-slider-thumb {
+    background: #ff4444;
+}
+
+.form-range::-moz-range-thumb {
+    background: #ff4444;
+}
+
+.slider-value {
+    font-weight: bold;
+    color: #ffe082;
+}
+
+/* Botón de eliminar */
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+    color: white;
+}

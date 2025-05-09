@@ -59,7 +59,6 @@ startButton.addEventListener('click', () => {
         startSimulation();
         startButton.textContent = 'Detener Simulación';
         startAutoPlaySongs();
-        // Ya no mostramos las recomendaciones
     } else {
         stopSimulation();
         startButton.textContent = 'Iniciar Simulación';
@@ -117,38 +116,16 @@ function playSongAuto(audioUrl) {
     currentAudio = new Audio(audioUrl);
     currentAudioUrl = audioUrl;
     setAudioVolume();
-    
-    // Configurar eventos del audio antes de reproducirlo
-    currentAudio.onplay = () => {
-        // Actualizar el botón de pausa/play cuando se reproduce el audio
-        if (nowPlayingPause) {
-            nowPlayingPause.innerHTML = '<i class="bi bi-pause-fill"></i>';
-        }
-    };
-    
-    currentAudio.onpause = () => {
-        // Actualizar el botón de pausa/play cuando se pausa el audio
-        if (nowPlayingPause) {
-            nowPlayingPause.innerHTML = '<i class="bi bi-play-fill"></i>';
-        }
-    };
-    
+    currentAudio.play();
+    showStopButton(true);
+    showNowPlaying(song, currentAudio);
+    addToHistory(song);
     currentAudio.onended = () => {
         hideNowPlaying();
         autoPlayTimeout = setTimeout(() => {
             playNextAutoSong();
         }, 1000);
     };
-    
-    // Reproducir el audio
-    currentAudio.play()
-        .catch(error => {
-            console.error('Error al reproducir el audio:', error);
-        });
-    
-    showStopButton(true);
-    showNowPlaying(song, currentAudio);
-    addToHistory(song);
 }
 
 function startSimulation() {
@@ -180,8 +157,6 @@ function startSimulation() {
 
 function stopSimulation() {
     clearInterval(simulationInterval);
-    hideNowPlaying(); // Ocultar la caja de reproducción
-    // Ya no es necesario ocultar las recomendaciones
 }
 
 function updatePPMDisplay(value) {
@@ -189,8 +164,29 @@ function updatePPMDisplay(value) {
 }
 
 function updateRecommendations(currentPPM) {
-    // Función vacía - ya no mostramos recomendaciones
-    // Esta función se mantiene para no romper las referencias existentes
+    // Encontrar canciones con PPM similares (±5 PPM para mayor precisión)
+    const matchingSongs = songs
+        .filter(song => Math.abs(song.ppm - currentPPM) <= 5)
+        .sort((a, b) => Math.abs(a.ppm - currentPPM) - Math.abs(b.ppm - currentPPM)) // Ordenar por similitud
+        .slice(0, 3); // Mostrar las 3 canciones más cercanas al PPM actual
+
+    recommendationsContainer.innerHTML = matchingSongs.map(song => `
+        <div class="col-md-4 mb-4">
+            <div class="card song-card text-white">
+                <div class="card-body">
+                    <h5 class="card-title">${song.name}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">${song.artist}</h6>
+                    <p class="card-text">
+                        Año: ${song.year}<br>
+                        PPM: ${song.ppm}
+                    </p>
+                    <button class="btn btn-outline-light mt-2" onclick="playSong('${song.audioUrl}', this)">
+                        <i class="bi bi-play-fill"></i> Reproducir
+                    </button>
+                </div>
+            </div>
+        </div>
+    `).join('');
 }
 
 function playSong(audioUrl, buttonElement) {
@@ -304,39 +300,22 @@ function showNowPlaying(song, audio) {
     nowPlayingVolume.oninput = function() {
         audio.volume = this.value / 100;
     };
-    // Botón pausa/play - implementación mejorada
+    // Botón pausa/play
     nowPlayingPause.onclick = function() {
-        if (!audio) return;
-        
-        try {
-            if (audio.paused) {
-                // Intentar reproducir el audio
-                audio.play()
-                    .then(() => {
-                        // Éxito al reproducir
-                        nowPlayingPause.innerHTML = '<i class="bi bi-pause-fill"></i>';
-                    })
-                    .catch(error => {
-                        console.error('Error al reproducir:', error);
-                        // Mantener el icono de play si hay error
-                        nowPlayingPause.innerHTML = '<i class="bi bi-play-fill"></i>';
-                    });
-            } else {
-                // Pausar el audio
-                audio.pause();
-                nowPlayingPause.innerHTML = '<i class="bi bi-play-fill"></i>';
-            }
-        } catch (error) {
-            console.error('Error al manipular el audio:', error);
+        if (audio.paused) {
+            audio.play();
+            nowPlayingPause.innerHTML = '<i class="bi bi-pause-fill"></i>';
+        } else {
+            audio.pause();
+            nowPlayingPause.innerHTML = '<i class="bi bi-play-fill"></i>';
         }
     };
-    
-    // Asegurarse de que el botón de pausa/play siempre refleje el estado actual del audio
-    if (audio && !audio.paused) {
+    audio.onplay = () => {
         nowPlayingPause.innerHTML = '<i class="bi bi-pause-fill"></i>';
-    } else {
+    };
+    audio.onpause = () => {
         nowPlayingPause.innerHTML = '<i class="bi bi-play-fill"></i>';
-    }
+    };
     // Botón skip
     nowPlayingSkip.onclick = function() {
         if (autoPlayActive) {
