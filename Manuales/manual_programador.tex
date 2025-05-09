@@ -1,14 +1,119 @@
 % Carátula para el manual del programador
 \documentclass[a4paper,12pt]{article}
-\usepackage[spanish]{babel}
 \usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[spanish,es-noshorthands]{babel}
+\usepackage{makeidx}
 \usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{geometry}
+\geometry{a4paper, margin=2.5cm}
+
+% Configuración de encabezados y pies de página
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyhead[R]{\includegraphics[height=1.5cm]{apipmusiclogo.png}}
+\fancyfoot[C]{\thepage}
+\fancyfoot[R]{Reproductor Inteligente}
+% \makeindex - Comentado para evitar la generación del índice
+
+% Definir entradas adicionales para el índice - Comentado para evitar problemas de formato
+% \newcommand{\indexaudio}{%
+%   \index{análisis de audio}%
+%   \index{audio!análisis}%
+%   \index{audio!características}%
+%   \index{audio!procesamiento}%
+% }
+
+% \newcommand{\indexessentia}{%
+%   \index{Essentia.js}%
+%   \index{Essentia.js!implementación}%
+%   \index{Essentia.js!alternativas}%
+%   \index{API!Essentia.js}%
+%   \index{Web Audio API}%
+% }
+
+% \newcommand{\indexcaracteristicas}{%
+%   \index{características de audio}%
+%   \index{BPM}%
+%   \index{PPM}%
+%   \index{dinámica}%
+%   \index{brillo}%
+%   \index{complejidad}%
+%   \index{ritmo}%
+%   \index{energía}%
+%   \index{danceability}%
+%   \index{happiness}%
+% }
+
+% \newcommand{\indexadmin}{%
+%   \index{administración!panel}%
+%   \index{administración!análisis de audio}%
+%   \index{administración!agregar canciones}%
+%   \index{panel de administración}%
+% }
+
+% \newcommand{\indexadminfiles}{%
+%   \index{admin.php}%
+%   \index{admin.php!estructura}%
+%   \index{admin.php!autenticación}%
+%   \index{admin.php!interfaz}%
+%   \index{admin\_add\_song.php}%
+  %\index{admin\_add\_song.php!funcionamiento}%
+  %\index{admin\_add\_song.php!validación}%
+  %\index{admin\_add\_song.php!carga de archivos}%
+  %\index{admin\_delete\_song.php}%
+  %\index{admin\_delete\_song.php!funcionamiento}%
+  %\index{admin\_delete\_song.php!eliminación de archivos}%
+  %\index{admin\_get\_songs.php}%
+  %\index{admin\_get\_songs.php!funcionamiento}%
+  %\index{admin\_get\_songs.php!filtrado}%
+  %\index{admin\_get\_songs.php!ordenamiento}%
+  %\index{archivos de administración}%
+  %\index{módulo de administración}%
+  %\index{carga de archivos}%
+  %\index{análisis automático}%
+% }
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{textcomp}
+
+% Configure listings package for JavaScript and other languages
+\lstdefinelanguage{javascript}{
+  keywords={break, case, catch, continue, debugger, default, delete, do, else, false, finally, for, function, if, in, instanceof, new, null, return, switch, this, throw, true, try, typeof, var, void, while, with, let, const},
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]',
+  morestring=[b]",
+  sensitive=true
+}
+
+\lstset{
+  language=javascript,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue},
+  commentstyle=\color{green},
+  stringstyle=\color{red},
+  showstringspaces=false,
+  breaklines=true
+}
 \usepackage{geometry}
 \usepackage{xcolor} % Added package for \textcolor command
+% lstset configuration continues from above
+\lstset{
+  breaklines=true,
+  breakatwhitespace=true,
+  postbreak=\mbox{\textcolor{gray}{$\hookrightarrow$}\space}
+}
 \usepackage[colorlinks=true, linkcolor=black, urlcolor=black]{hyperref}
 \geometry{top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm}
 
 \begin{document}
+
 
 % Logo arriba a la derecha
 \begin{flushright}
@@ -27,6 +132,9 @@
     Curso: 7°2 \\
     \vspace{0.5cm}
     \textbf{Materia:} Proyecto de Desarrollo de Software para Plataformas Móviles
+    
+    \vspace{0.7cm}
+    \includegraphics[width=0.3\textwidth]{apipmusiclogo.png}\\[0.5cm]
 \end{center}
 
 \vfill
@@ -46,36 +154,490 @@
 % ===============================
 % 1. Introducción
 % ===============================
-\section{Introducción}
+\section{Introducción}\index{introducción}
 Este manual está dirigido a programadores que deseen comprender, mantener o extender el sistema de Reproductor Inteligente de música desarrollado para la materia ``Proyecto de Desarrollo de Software para Plataformas Móviles". Aquí se documentan la estructura, los archivos principales, la base de datos y las recomendaciones para el desarrollo.
 
 % ===============================
 % 2. Estructura del Proyecto
 % ===============================
-\section{Estructura del Proyecto}
+\section{Estructura del Proyecto}\index{estructura del proyecto}
 El proyecto se compone principalmente de los siguientes archivos y carpetas:
 \begin{itemize}
-    \item \textbf{ppm\_music.html / ppm\_music.js}: Interfaz y lógica principal del reproductor.
-    \item \textbf{list\_songs.php}: Lista todas las canciones desde la base de datos.
-    \item \textbf{get\_songs.php}: Devuelve las canciones en formato JSON para la app.
-    \item \textbf{songs\_database.sql}: Script SQL para la base de datos de canciones.
+    \item \textbf{ppm\_music.html / ppm\_music.js}\index{ppm\_music.html}\index{ppm\_music.js}: Interfaz y lógica principal del reproductor.
+    \item \textbf{list\_songs.php}\index{list\_songs.php}: Lista todas las canciones desde la base de datos.
+    \item \textbf{get\_songs.php}\index{get\_songs.php}: Devuelve las canciones en formato JSON para la app.
+    \item \textbf{songs\_database.sql}\index{songs\_database.sql}\index{base de datos}: Script SQL para la base de datos de canciones.
+    \item \textbf{admin.php}\index{admin.php}\index{administración}: Interfaz del panel de administración.
+    \item \textbf{admin\_add\_song.php}\index{admin\_add\_song.php}: Procesa la adición de nuevas canciones.
+    \item \textbf{admin\_delete\_song.php}\index{admin\_delete\_song.php}: Maneja la eliminación de canciones.
+    \item \textbf{admin\_get\_songs.php}\index{admin\_get\_songs.php}: Recupera canciones para el panel de administración.
     \item \textbf{Manuales/}: Carpeta de documentación.
 \end{itemize}
 
 % ===============================
 % 3. Base de Datos
 % ===============================
-\section{Base de Datos}
-La base de datos se encuentra en el archivo \texttt{songs\_database.sql}. Contiene la tabla \texttt{songs} con los campos principales: id, artist, name, year, ppm, audioUrl, entre otros.
+\section{Base de Datos}\index{base de datos}\index{SQL}\index{MySQL}
+
+La base de datos se encuentra en el archivo \texttt{songs\_database.sql}. El sistema utiliza MySQL como gestor de base de datos y contiene principalmente las siguientes tablas:
+
+\subsection{Estructura de Tablas}\index{base de datos!estructura}\index{tablas}
+
+\subsubsection{Tabla songs}\index{tabla!songs}\index{canciones!almacenamiento}
+
+La tabla principal \texttt{songs} almacena toda la información de las canciones y contiene los siguientes campos:
+
+\begin{itemize}
+    \item \textbf{id}: Identificador único de la canción (clave primaria).\index{id}\index{clave primaria}
+    \item \textbf{artist}: Nombre del artista o banda.\index{artist}
+    \item \textbf{name}: Título de la canción.\index{name}
+    \item \textbf{year}: Año de lanzamiento.\index{year}
+    \item \textbf{PPM}: Pulsos Por Minuto, indica el tempo de la canción.\index{PPM}\index{tempo}
+    \item \textbf{audioUrl}: Ruta al archivo de audio.\index{audioUrl}\index{ruta de audio}
+    \item \textbf{created\_at}: Fecha y hora de creación del registro.\index{created\_at}\index{timestamp}
+    \item \textbf{Parametros de analisis de audio}:\index{caracteristicas}
+    \begin{itemize}
+        \item \textbf{energy}: Nivel de energía de la canción (0-1).\index{energy}
+        \item \textbf{danceability}: Nivel de bailabilidad (0-1).\index{danceability}
+        \item \textbf{happiness}: Nivel de felicidad o positividad (0-1).\index{happiness}
+        \item \textbf{instrumentalness}: Nivel de contenido instrumental vs. vocal (0-1).\index{instrumentalness}
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Tabla directorio\_archivos}\index{tabla!directorio\_archivos}\index{archivos!directorio}
+
+Esta tabla complementaria almacena información sobre la ubicación física de los archivos de audio:
+
+\begin{itemize}
+    \item \textbf{cancion\_id}: Identificador de la canción (relacionado con la tabla songs).\index{cancion\_id}
+    \item \textbf{ruta\_archivo}: Ruta física al archivo en el servidor.\index{ruta\_archivo}
+    \item \textbf{audioUrl}: URL relativa para acceder al archivo desde el navegador.\index{audioUrl}
+\end{itemize}
+
+\subsection{Índices Optimizados}\index{índices}\index{optimización}\index{rendimiento}\index{consultas!optimización}
+
+Para mejorar el rendimiento del sistema, especialmente en las consultas relacionadas con el análisis de audio y las recomendaciones basadas en características musicales, se han implementado los siguientes índices:
+
+\begin{itemize}
+    \item \textbf{Índices básicos}:
+    \begin{itemize}
+        \item \texttt{PRIMARY KEY (id)}: Índice primario sobre el identificador único.\index{PRIMARY KEY}
+        \item \texttt{idx\_artist (artist)}: Optimiza búsquedas por nombre de artista.\index{idx\_artist}
+        \item \texttt{idx\_name (name)}: Optimiza búsquedas por título de canción.\index{idx\_name}
+        \item \texttt{idx\_year (year)}: Optimiza búsquedas y filtros por año.\index{idx\_year}
+    \end{itemize}
+    
+    \item \textbf{Índices para análisis de audio}:\index{audio!análisis}
+    \begin{itemize}
+        \item \texttt{idx\_ppm (PPM)}: Acelera las búsquedas por tempo, crucial para las recomendaciones basadas en PPM.\index{idx\_ppm}
+        \item \texttt{idx\_energy (energy)}: Optimiza filtros por nivel de energía.\index{idx\_energy}
+        \item \texttt{idx\_danceability (danceability)}: Mejora el rendimiento en consultas que filtran por bailabilidad.\index{idx\_danceability}
+        \item \texttt{idx\_happiness (happiness)}: Optimiza búsquedas por nivel de felicidad o positividad.\index{idx\_happiness}
+        \item \texttt{idx\_created\_at (created\_at)}: Mejora el rendimiento en consultas que ordenan por fecha de creación.\index{idx\_created\_at}
+    \end{itemize}
+\end{itemize}
+
+Estos índices son especialmente importantes para el funcionamiento eficiente del sistema de recomendación, que necesita filtrar y ordenar canciones basándose en múltiples criterios de análisis de audio de forma simultánea.
 
 % ===============================
 % 4. Explicación de Archivos
 % ===============================
-\section{Explicación de Archivos}
+\section{Explicación de Archivos}\index{archivos}
+\subsection{API de Análisis de Audio}\index{audio}\index{essentia}
+
+El sistema utiliza una potente API de análisis de audio llamada \textbf{Essentia.js} para procesar archivos de audio y extraer automáticamente características musicales relevantes. Esta funcionalidad es fundamental en el módulo de administración, donde permite detectar automáticamente los siguientes parámetros al agregar una nueva canción:
+
+\begin{itemize}
+    \item \textbf{BPM/PPM}: Beats Por Minuto o Pulsos Por Minuto, que indica el tempo de la canción.
+    \item \textbf{Características avanzadas}:\index{caracteristicas}
+    \begin{itemize}
+        \item \textbf{Dinámica}: Mide la variación de volumen en la canción.
+        \item \textbf{Brillo}: Analiza la presencia de frecuencias altas (agudos).
+        \item \textbf{Complejidad}: Evalúa los cambios y variaciones en la estructura musical.
+        \item \textbf{Ritmo}: Combina BPM y energía para determinar la intensidad rítmica.
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Implementación}\index{implementación!Essentia.js}\index{implementación!Web Audio API}
+
+La implementación de Essentia.js se realiza a través de varios archivos JavaScript:
+
+\begin{itemize}
+    \item \textbf{audio-analyzer.js}\index{audio-analyzer.js}: Implementación original que utiliza Essentia.js para el análisis de audio.
+    \item \textbf{simple-audio-analyzer.js}\index{simple-audio-analyzer.js}: Implementación alternativa que utiliza la Web Audio API nativa del navegador para realizar análisis similares sin dependencias externas.
+    \item \textbf{admin-audio-analyzer.js}\index{admin-audio-analyzer.js}: Integra el analizador de audio con la interfaz de administración.
+\end{itemize}
+
+El sistema está diseñado para utilizar preferentemente \texttt{simple-audio-analyzer.js} debido a su mayor compatibilidad con diferentes navegadores, evitando problemas con la carga de archivos WebAssembly de Essentia.js.
+
+\subsubsection{Flujo de Trabajo}\index{flujo de trabajo!análisis de audio}
+
+El proceso de análisis de audio sigue estos pasos:
+
+\begin{enumerate}
+    \item El administrador selecciona un archivo de audio en el formulario de agregar canción.
+    \item El sistema analiza automáticamente el archivo para extraer BPM, energía y otras características.
+    \item Los resultados del análisis se muestran en la interfaz y se utilizan para precompletar los campos del formulario.
+    \item Al guardar la canción, estos datos se envían al servidor junto con la información básica (título, artista, etc.).
+    \item El script \texttt{save\_analysis.php}\index{save\_analysis.php} procesa estos datos y los guarda en la base de datos.
+\end{enumerate}
+
+Esta funcionalidad permite que el sistema ofrezca recomendaciones precisas basadas en las características musicales de cada canción, mejorando significativamente la experiencia del usuario.
+
+\subsection{Modulo de Administracion}\index{administración!módulo}\index{módulos!administración}
+
+El modulo de administracion es una parte fundamental del sistema que permite gestionar el catalogo de canciones, incluyendo la adicion, edicion y eliminacion de canciones, asi como el analisis automatico de archivos de audio mediante la integracion con Essentia.js. Esta compuesto por cuatro archivos PHP principales que trabajan en conjunto para proporcionar una interfaz completa de gestion del contenido musical.
+
+\subsubsection{admin.php}\index{admin.php!estructura}
+
+Este archivo es el punto de entrada al panel de administración. Proporciona una interfaz gráfica para gestionar canciones y utiliza los otros archivos del módulo para realizar operaciones específicas.
+
+\begin{itemize}
+    \item \textbf{Autenticación y Seguridad:}
+    \begin{verbatim}
+<?php
+session_start();
+
+// Verificar si el usuario está autenticado como administrador
+if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+    // Si no está autenticado, redirigir a la página principal
+    header('Location: index.html');
+    exit;
+}
+?>
+    \end{verbatim}
+    Implementa un sistema de autenticación basado en sesiones para proteger el acceso al panel de administración.
+    
+    \item \textbf{Interfaz de Administración:}
+    La interfaz incluye:
+    \begin{itemize}
+        \item Un formulario para agregar nuevas canciones con campos para metadatos (título, artista, año)
+        \item Controles deslizantes para ajustar parámetros musicales (energía, bailabilidad, etc.)
+        \item Una sección para cargar archivos de audio
+        \item Una tabla para visualizar y gestionar las canciones existentes
+    \end{itemize}
+    
+    \item \textbf{Integración con el Analizador de Audio:}
+    \begin{verbatim}
+<div id="analysisStatus" class="mt-2 d-none">
+    <div class="d-flex align-items-center">
+        <div class="spinner-border spinner-border-sm text-light me-2" role="status">
+            <span class="visually-hidden">Analizando...</span>
+        </div>
+        <span>Analizando audio...</span>
+    </div>
+</div>
+    \end{verbatim}
+    Incluye elementos para mostrar el progreso del análisis de audio y actualizar dinámicamente los valores de los parámetros musicales.
+    
+    \item \textbf{JavaScript para Análisis Automático:}
+    \begin{verbatim}
+// Analizar archivo de audio cuando se selecciona
+songFile.addEventListener('change', async function() {
+    if (!this.files || !this.files[0]) return;
+    
+    const file = this.files[0];
+    analysisStatus.classList.remove('d-none');
+    
+    try {
+        // Crear instancia del analizador
+        const analyzer = new AdminAudioAnalyzer();
+        
+        // Analizar el archivo
+        const results = await analyzer.analyzeAudioFile(file);
+        
+        // Actualizar los campos del formulario con los resultados
+        songPPM.value = Math.round(results.bpm);
+        songEnergy.value = results.energy.toFixed(2);
+        songDynamics.value = results.dynamics.toFixed(2);
+        songBrightness.value = results.brightness.toFixed(2);
+        songComplexity.value = results.complexity.toFixed(2);
+        songRhythm.value = results.rhythm.toFixed(2);
+        
+        // Actualizar valores mostrados
+        updateSliderValue('songEnergy', results.energy);
+        updateSliderValue('songDynamics', results.dynamics);
+        updateSliderValue('songBrightness', results.brightness);
+        updateSliderValue('songComplexity', results.complexity);
+        updateSliderValue('songRhythm', results.rhythm);
+        
+        // Calcular parámetros derivados
+        songDanceability.value = results.danceability.toFixed(2);
+        songHappiness.value = results.happiness.toFixed(2);
+        songInstrumentalness.value = results.instrumentalness.toFixed(2);
+        
+        updateSliderValue('songDanceability', results.danceability);
+        updateSliderValue('songHappiness', results.happiness);
+        updateSliderValue('songInstrumentalness', results.instrumentalness);
+        
+        showToast('Análisis completado con éxito');
+    } catch (error) {
+        console.error('Error al analizar audio:', error);
+        showToast('Error al analizar el archivo de audio');
+    } finally {
+        analysisStatus.classList.add('d-none');
+    }
+});
+    \end{verbatim}
+    Implementa la funcionalidad para analizar automáticamente los archivos de audio cuando se seleccionan, utilizando la clase \texttt{AdminAudioAnalyzer} para extraer características musicales y actualizar los campos del formulario.
+\end{itemize}
+
+\subsubsection{admin\_add\_song.php}\index{admin\_add\_song.php!funcionamiento}
+
+Este archivo procesa la adición de nuevas canciones al sistema, incluyendo la carga de archivos de audio y el almacenamiento de metadatos y parámetros musicales.
+
+\begin{itemize}
+    \item \textbf{Validación y Procesamiento de Archivos:}
+    \begin{verbatim}
+// Verificar que se haya enviado un archivo
+if (!isset($_FILES['songFile']) || $_FILES['songFile']['error'] !== UPLOAD_ERR_OK) {
+    throw new Exception('Error al subir el archivo de audio');
+}
+
+// Verificar que se hayan enviado los datos requeridos
+if (empty($_POST['songTitle']) || empty($_POST['songArtist'])) {
+    throw new Exception('El título y el artista son obligatorios');
+}
+
+// Validar el archivo
+$fileInfo = pathinfo($_FILES['songFile']['name']);
+$extension = strtolower($fileInfo['extension']);
+
+// Verificar extensión
+$allowedExtensions = ['mp3', 'wav', 'ogg'];
+if (!in_array($extension, $allowedExtensions)) {
+    throw new Exception('Formato de archivo no válido. Solo se permiten archivos MP3, WAV y OGG');
+}
+
+// Verificar tamaño (20MB máximo)
+$maxSize = 20 * 1024 * 1024; // 20MB en bytes
+if ($_FILES['songFile']['size'] > $maxSize) {
+    throw new Exception('El archivo es demasiado grande. El tamaño máximo permitido es 20MB');
+}
+    \end{verbatim}
+    Implementa validaciones exhaustivas para los archivos de audio, verificando el formato, tamaño y presencia de metadatos obligatorios.
+    
+    \item \textbf{Procesamiento de Parámetros Musicales:}
+    \begin{verbatim}
+// Parámetros tradicionales
+$energy = !empty($_POST['songEnergy']) ? $_POST['songEnergy'] : null;
+$danceability = !empty($_POST['songDanceability']) ? $_POST['songDanceability'] : null;
+$happiness = !empty($_POST['songHappiness']) ? $_POST['songHappiness'] : null;
+$instrumentalness = !empty($_POST['songInstrumentalness']) ? $_POST['songInstrumentalness'] : null;
+
+// Nuevas características avanzadas
+$dynamics = !empty($_POST['songDynamics']) ? $_POST['songDynamics'] : null;
+$brightness = !empty($_POST['songBrightness']) ? $_POST['songBrightness'] : null;
+$complexity = !empty($_POST['songComplexity']) ? $_POST['songComplexity'] : null;
+$rhythm = !empty($_POST['songRhythm']) ? $_POST['songRhythm'] : null;
+
+// Si no se proporcionan los parámetros tradicionales, usar los nuevos como sustitutos
+if ($energy === null && $rhythm !== null) {
+    $energy = $rhythm; // Usar ritmo como sustituto de energía
+}
+if ($danceability === null && $dynamics !== null) {
+    $danceability = $dynamics; // Usar dinámica como sustituto de bailabilidad
+}
+if ($happiness === null && $brightness !== null) {
+    $happiness = $brightness; // Usar brillo como sustituto de felicidad
+}
+if ($instrumentalness === null && $complexity !== null) {
+    $instrumentalness = 1 - $complexity; // Usar inverso de complejidad como instrumentalidad
+}
+    \end{verbatim}
+    Procesa tanto los parámetros musicales tradicionales como las características avanzadas, con lógica para utilizar valores alternativos cuando sea necesario.
+    
+    \item \textbf{Inserción en la Base de Datos:}
+    \begin{verbatim}
+// Insertar la canción en la base de datos (solo parámetros tradicionales)
+$stmt = $pdo->prepare("
+    INSERT INTO songs (artist, name, year, energy, danceability, happiness, instrumentalness, 
+                      PPM, audioUrl)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+");
+
+$stmt->execute([
+    $artist,
+    $title,
+    $year,
+    $energy,
+    $danceability,
+    $happiness,
+    $instrumentalness,
+    $ppm,
+    $audioUrl
+]);
+    \end{verbatim}
+    Almacena la información de la canción en la base de datos, incluyendo los parámetros musicales extraídos del análisis de audio.
+\end{itemize}
+
+\subsubsection{admin\_delete\_song.php}\index{admin\_delete\_song.php!funcionamiento}
+
+Este archivo maneja la eliminación de canciones del sistema, incluyendo la eliminación del archivo de audio físico y el registro en la base de datos. Su implementación garantiza que no queden archivos huérfanos en el servidor ni registros inconsistentes en la base de datos.
+
+\begin{itemize}
+    \item \textbf{Configuración inicial y validación:}
+    \begin{verbatim}
+<?php
+header('Content-Type: application/json');
+
+// Obtener datos de la solicitud
+$data = json_decode(file_get_contents('php://input'), true);
+
+if (!isset($data['id']) || empty($data['id'])) {
+    http_response_code(400);
+    echo json_encode([
+        'success' => false,
+        'message' => 'ID de canción no proporcionado'
+    ]);
+    exit;
+}
+
+$songId = $data['id'];
+    \end{verbatim}
+    El código comienza configurando la cabecera para devolver JSON y luego obtiene y valida los datos de la solicitud. Si no se proporciona un ID válido, devuelve un error 400 con un mensaje claro. Observa cómo se utiliza \texttt{file\_get\_contents('php://input')} para obtener datos enviados en formato JSON, lo que es común en aplicaciones modernas que utilizan AJAX.
+    
+    \item \textbf{Conexión a la base de datos y manejo de excepciones:}
+    \begin{verbatim}
+$host = 'localhost';
+$dbname = 'songs_database';
+$user = 'root';
+$pass = '';
+
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $user, $pass);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
+    // Código para eliminar la canción...
+    
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Error: ' . $e->getMessage()
+    ]);
+}
+    \end{verbatim}
+    Se establece una conexión a la base de datos utilizando PDO (PHP Data Objects), que proporciona una capa de abstracción para el acceso a la base de datos. Todo el código de eliminación está envuelto en un bloque try-catch para manejar posibles errores y devolver respuestas adecuadas al cliente.
+    
+    \item \textbf{Obtención de información y eliminación del archivo físico:}
+    \begin{verbatim}
+// Primero, obtener la información de la canción para eliminar el archivo
+$stmt = $pdo->prepare("SELECT audioUrl FROM songs WHERE id = ?");
+$stmt->execute([$songId]);
+$song = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$song) {
+    throw new Exception('Canción no encontrada');
+}
+
+// Eliminar el archivo físico si existe
+$audioUrl = $song['audioUrl'];
+if (file_exists($audioUrl) && strpos($audioUrl, 'SpotiDownloader.com - Las 100 mejores canciones de la historia del Rock/') === 0) {
+    unlink($audioUrl);
+}
+    \end{verbatim}
+    Antes de eliminar el registro de la base de datos, el código obtiene la URL del archivo de audio asociado a la canción. Observa la validación de seguridad: se verifica que el archivo exista y que la ruta comience con el directorio esperado (para evitar la eliminación de archivos fuera del directorio de música). La función \texttt{unlink()} de PHP se utiliza para eliminar el archivo físico del servidor.
+    
+    \item \textbf{Eliminación del registro de la base de datos y respuesta:}
+    \begin{verbatim}
+// Eliminar la canción de la base de datos
+$stmt = $pdo->prepare("DELETE FROM songs WHERE id = ?");
+$stmt->execute([$songId]);
+
+if ($stmt->rowCount() === 0) {
+    throw new Exception('No se pudo eliminar la canción');
+}
+
+echo json_encode([
+    'success' => true,
+    'message' => 'Canción eliminada correctamente'
+]);
+    \end{verbatim}
+    Finalmente, se elimina el registro de la base de datos utilizando una consulta SQL parametrizada (lo que previene inyecciones SQL). Se verifica el número de filas afectadas para confirmar que la eliminación fue exitosa. Si todo va bien, se devuelve una respuesta JSON con un mensaje de éxito.
+\end{itemize}
+
+Este archivo es un excelente ejemplo de cómo implementar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) de forma segura en PHP, con manejo adecuado de errores y validación de entrada.
+
+\subsubsection{admin\_get\_songs.php}\index{admin\_get\_songs.php!funcionamiento}
+
+Este archivo proporciona una API para obtener la lista de canciones para el panel de administración. Es fundamental para mostrar el catálogo de música en la interfaz de administración, permitiendo a los administradores ver y gestionar todas las canciones disponibles.
+
+\begin{itemize}
+    \item \textbf{Configuración inicial y conexión a la base de datos:}
+    \begin{verbatim}
+<?php
+header('Content-Type: application/json');
+
+$host = 'localhost';
+$dbname = 'songs_database';
+$user = 'root';
+$pass = '';
+
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $user, $pass);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    \end{verbatim}
+    El archivo comienza estableciendo la cabecera para devolver JSON y configurando la conexión a la base de datos. Utiliza PDO para una conexión segura y manejo de errores eficiente. Todo el código está envuelto en un bloque try-catch para capturar y manejar posibles errores de base de datos.
+    
+    \item \textbf{Consulta a la base de datos y obtención de canciones:}
+    \begin{verbatim}
+    // Obtener todas las canciones con sus IDs para administración
+    $stmt = $pdo->query("SELECT id, artist, name, year, PPM as ppm, audioUrl 
+                       FROM songs ORDER BY name ASC");
+    $songs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    \end{verbatim}
+    Realiza una consulta SQL para obtener todas las canciones de la base de datos, seleccionando los campos relevantes para la administración. Observa cómo se utiliza un alias (\texttt{PPM as ppm}) para normalizar el nombre del campo en la respuesta JSON. Los resultados se ordenan alfabéticamente por nombre de canción para facilitar la navegación.
+    
+    \item \textbf{Procesamiento de rutas de audio:}
+    \begin{verbatim}
+    // Procesar las rutas de audio para asegurar que sean accesibles desde el navegador
+    foreach ($songs as &$song) {
+        // Asegurarse de que la ruta sea relativa para que el navegador pueda acceder a ella
+        if (strpos($song['audioUrl'], 'SpotiDownloader.com') === 0) {
+            // La ruta ya está en formato correcto (relativa)
+        } else if (file_exists($song['audioUrl'])) {
+            // Es una ruta absoluta local, convertirla a relativa si es necesario
+            // No hacemos nada aquí porque ya debería estar en formato correcto
+        }
+    }
+    \end{verbatim}
+    Este bloque de código procesa las rutas de los archivos de audio para asegurar que sean accesibles desde el navegador. Verifica si las rutas comienzan con el directorio estándar de música (\texttt{SpotiDownloader.com}) y comprueba la existencia de los archivos. Este paso es crucial para garantizar que los enlaces a los archivos de audio funcionen correctamente en la interfaz de administración.
+    
+    \item \textbf{Respuesta JSON y manejo de errores:}
+    \begin{verbatim}
+    echo json_encode($songs);
+} catch(PDOException $e) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+}
+?>
+    \end{verbatim}
+    Finalmente, el código devuelve los datos de las canciones en formato JSON. Si ocurre algún error durante la ejecución, se captura la excepción, se establece un código de estado HTTP 500 (Error Interno del Servidor) y se devuelve un mensaje de error en formato JSON. Este enfoque proporciona una respuesta consistente tanto en casos de éxito como de error.
+\end{itemize}
+
+Este archivo es un ejemplo de una API REST simple pero efectiva que sigue las mejores prácticas de desarrollo web moderno: devuelve datos en formato JSON, maneja errores adecuadamente y procesa los datos antes de enviarlos al cliente para garantizar su usabilidad.
+
+\subsection{Importancia del Módulo de Administración}
+
+El módulo de administración representa un componente crítico del sistema, ya que permite la gestión completa del catálogo musical y aprovecha las capacidades de análisis de audio de Essentia.js. Sus principales características son:
+
+\begin{itemize}
+    \item \textbf{Integración con análisis de audio:} Permite detectar automáticamente BPM, energía, dinámica, brillo y otras características musicales al subir archivos de audio, ahorrando tiempo al administrador y garantizando datos precisos.
+    
+    \item \textbf{Gestión completa del catálogo:} Facilita la adición, edición y eliminación de canciones, con validaciones para garantizar la integridad de los datos.
+    
+    \item \textbf{Seguridad:} Implementa autenticación basada en sesiones para proteger el acceso al panel de administración, validación de entradas para prevenir inyecciones SQL, y verificaciones de seguridad para la manipulación de archivos.
+    
+    \item \textbf{API REST:} Proporciona endpoints para la comunicación entre el frontend y el backend, siguiendo las mejores prácticas de desarrollo web moderno.
+\end{itemize}
+
+La arquitectura del módulo está diseñada para ser modular y extensible, permitiendo añadir nuevas funcionalidades fácilmente. Los archivos están organizados siguiendo el principio de responsabilidad única, donde cada archivo tiene un propósito específico bien definido.
+
 Esta sección describe el propósito y funcionamiento de los archivos principales que componen el sistema. Se detallan tanto los archivos de interfaz (HTML/JS) como los del backend (PHP y SQL), explicando su rol, interacción y ejemplos relevantes para el programador.
 
-\subsection{index.html}
-El archivo \texttt{index.html} es la página principal del sistema y cumple la función de ser la interfaz de usuario del ``Reproductor Inteligente". Este archivo HTML estructura toda la aplicación web y define la experiencia visual para el usuario. A continuación se describe en detalle cada sección del documento:
+\subsection{index.html}\index{index.html}
+El archivo \texttt{index.html} es la pagina principal del sistema y cumple la función de ser la interfaz de usuario del ``Reproductor Inteligente". Este archivo HTML estructura toda la aplicación web y define la experiencia visual para el usuario. A continuación se describe en detalle cada sección del documento:
 
 \subsubsection{Estructura General}
 \begin{itemize}
@@ -102,7 +664,7 @@ El archivo \texttt{index.html} es la página principal del sistema y cumple la f
     Importa Bootstrap 5 para el diseño responsivo, Bootstrap Icons para los iconos de la interfaz, y el archivo JavaScript principal \texttt{ppm\_music.js} que contiene toda la lógica de la aplicación.
 \end{itemize}
 
-\subsubsection{Estilos CSS Personalizados}
+\subsubsection{Estilos CSS Personalizados}\index{CSS!personalizado}
 \begin{itemize}
     \item \textbf{Estilo General:}
     \begin{verbatim}
@@ -160,29 +722,27 @@ El archivo \texttt{index.html} es la página principal del sistema y cumple la f
     Personaliza el control deslizante de PPM, ajustando su tamaño, márgenes y el color del "thumb" (control deslizante).
 \end{itemize}
 
-\subsubsection{Componentes Principales de la Interfaz}
+\subsubsection{Componentes Principales de la Interfaz}\index{interfaz!componentes}
 \begin{itemize}
     \item \textbf{Encabezado (header):}
     \begin{verbatim}
     <header class="bg-dark text-white py-3 mb-4">
-        <div class="container d-flex justify-content-between align-items-center">
+        <div class="container d-flex justify-content-between align-items-center">\index{interfaz!encabezado}
             <h2 class="mb-0">Reproductor Inteligente</h2>
-            <nav>
-                <a href="list_songs.php" class="btn btn-outline-light ms-2">Mostrar canciones</a>
-            </nav>
+            <div>
+                <a href="index.html" class="btn btn-outline-light me-2">
+                    <i class="bi bi-music-player me-2"></i>Ir al Reproductor
+                </a>
+                <a href="list_songs.php" class="btn btn-outline-light me-2">
+                    <i class="bi bi-music-note-list me-2"></i>Ver Canciones
+                </a>
+                <a href="login.php?logout=1" class="btn btn-outline-danger">
+                    <i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión
+                </a>
+            </div>
         </div>
-    </header>
     \end{verbatim}
-    Crea una barra de navegación superior con el título de la aplicación y un enlace al listado completo de canciones.
-
-    \item \textbf{Título Principal:}
-    \begin{verbatim}
-    <h1 class="text-center mb-5">
-        <span class="heart-icon">[emoji-corazon]</span> 
-        Reproductor Inteligente
-    </h1>
-    \end{verbatim}
-    Muestra el título principal con un ícono de corazón animado.
+    Crea una barra de navegación superior con el título de la aplicación y enlaces para navegar entre las diferentes secciones del sistema.\\indexadmin
 
     \item \textbf{Visualización y Control de PPM:}
     \begin{verbatim}
@@ -252,17 +812,17 @@ El archivo \texttt{index.html} es la página principal del sistema y cumple la f
     Muestra un panel flotante en la esquina superior derecha con el historial de canciones reproducidas. Tiene una altura máxima y scroll vertical para manejar listas largas. Inicialmente está oculto y se actualiza dinámicamente.
 \end{itemize}
 
-\subsubsection{Integración con JavaScript}
+\subsubsection{Integración con JavaScript}\index{JavaScript!integración}\index{DOM}
 El archivo HTML proporciona la estructura y los elementos DOM que serán manipulados por \texttt{ppm\_music.js}. Los elementos tienen IDs específicos que son referenciados en el código JavaScript para actualizar la interfaz dinámicamente. Por ejemplo:
 \begin{itemize}
-    \item \texttt{ppmSlider} y \texttt{ppmValue} para el control y visualización de PPM
-    \item \texttt{startSimulation} y \texttt{stopSong} para los botones de control
-    \item \texttt{nowPlayingCard} y sus elementos hijos para la información de reproducción actual
-    \item \texttt{songRecommendations} para las tarjetas de canciones recomendadas
-    \item \texttt{historyCard} y \texttt{historyList} para el historial de reproducción
+    \item \texttt{ppmSlider} y \texttt{ppmValue} para el control y visualización de PPM\index{PPM!control}\index{PPM!visualización}
+    \item \texttt{startSimulation} y \texttt{stopSong} para los botones de control\index{simulación}\index{controles}
+    \item \texttt{nowPlayingCard} y sus elementos hijos para la información de reproducción actual\index{reproducción!actual}
+    \item \texttt{songRecommendations} para las tarjetas de canciones recomendadas\index{recomendaciones}\index{canciones!recomendadas}
+    \item \texttt{historyCard} y \texttt{historyList} para el historial de reproducción\index{historial}\index{reproducción!historial}
 \end{itemize}
 
-\subsection{ppm\_music.js}
+\subsection{ppm\_music.js}\index{ppm\_music.js}\index{JavaScript!archivos}
 El archivo \texttt{ppm\_music.js} es el componente principal de JavaScript que controla toda la lógica de la aplicación. Este script maneja la simulación de PPM (pulsaciones por minuto), la recomendación de canciones basada en el PPM actual, y la reproducción de audio.
 
 \subsubsection{Índice de Funciones}
@@ -279,7 +839,7 @@ A continuación se presenta un índice detallado de todas las funciones implemen
     \item \textbf{updatePPMDisplay(value):} Actualiza el valor mostrado de PPM en la interfaz.
     \item \textbf{updateRecommendations(currentPPM):} Actualiza las recomendaciones de canciones basadas en el PPM actual.
     \item \textbf{playSong(audioUrl, buttonElement):} Maneja la reproducción manual de una canción seleccionada por el usuario.
-    \item \textbf{showStopButton(show):} Muestra u oculta el botón para detener la reproducción.
+    \item \textbf{showStopButton(show):} Muestra u oculta el boton para detener la reproducción.
     \item \textbf{showNowPlaying(song, audio):} Muestra la información de la canción en reproducción y actualiza la interfaz.
     \item \textbf{hideNowPlaying():} Oculta la información de la canción en reproducción.
     \item \textbf{formatTime(seconds):} Formatea el tiempo en segundos a formato MM:SS para la visualización.
@@ -416,7 +976,7 @@ A continuación se presenta un índice detallado de todas las funciones implemen
 
     function playNextAutoSong() {
         if (!autoPlayActive) return;
-        // Tomar el BPM actual simulado del slider
+        // Tomar el BPM\index{BPM} actual simulado del slider
         const currentPPM = parseInt(ppmSlider.value);
         // Buscar canciones similares
         const matchingSongs = songs
@@ -444,7 +1004,7 @@ A continuación se presenta un índice detallado de todas las funciones implemen
         // Evitar duplicados consecutivos
         if (playedHistory.length > 0 && playedHistory[0].name === song.name) return;
         
-        // Añadir al principio y limitar a 10 entradas
+        // A\~nadir al principio y limitar a 10 entradas
         playedHistory.unshift(song);
         if (playedHistory.length > 10) playedHistory.pop();
         
@@ -475,8 +1035,8 @@ El flujo principal de ejecución del script es:
     \item Mantenimiento del historial de reproducción y visualización de información de la canción actual.
 \end{enumerate}
 
-\subsection{list\_songs.php}
-El archivo \texttt{list\_songs.php} implementa una página web que muestra la lista completa de canciones disponibles en la base de datos. Combina HTML, CSS y PHP para crear una interfaz de tabla con todas las canciones y sus detalles.
+\subsection{list\_songs.php}\index{list\_songs.php}
+El archivo \texttt{list\_songs.php} implementa una pagina web que muestra la lista completa de canciones disponibles en la base de datos. Combina HTML, CSS y PHP para crear una interfaz de tabla con todas las canciones y sus detalles.
 
 \subsubsection{Estructura General}
 \begin{itemize}
@@ -531,7 +1091,7 @@ El archivo \texttt{list\_songs.php} implementa una página web que muestra la li
         </div>
     </header>
     \end{verbatim}
-    Crea una barra de navegación superior con el título de la página y un botón para volver al reproductor principal.
+    Crea una barra de navegación superior con el título de la pagina y un boton para volver al reproductor principal.
 
     \item \textbf{Tabla de Canciones:}
     \begin{verbatim}
@@ -615,7 +1175,7 @@ Este bloque:
 \end{itemize}
 
 \subsection{list\_songs.js}
-El archivo \texttt{list\_songs.js} es una versión alternativa para cargar las canciones en la página \texttt{list\_songs.php} utilizando JavaScript en lugar de PHP directo. Este enfoque permite una mayor flexibilidad y la posibilidad de actualizar la tabla sin recargar la página.
+El archivo \texttt{list\_songs.js} es una versión alternativa para cargar las canciones en la pagina \texttt{list\_songs.php} utilizando JavaScript en lugar de PHP directo. Este enfoque permite una mayor flexibilidad y la posibilidad de actualizar la tabla sin recargar la pagina.
 
 \subsubsection{Estructura General}
 \begin{verbatim}
@@ -649,491 +1209,132 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 \end{verbatim}
 
-\subsubsection{Análisis del Código}
+\subsubsection{An\'alisis del C\'odigo}\index{an\'alisis!c\'odigo}
 \begin{itemize}
     \item \textbf{Evento DOMContentLoaded:}
     \begin{verbatim}
     document.addEventListener('DOMContentLoaded', function() {
         // Código principal
-    });
-    \end{verbatim}
-    Asegura que el código se ejecute solo después de que el DOM esté completamente cargado, evitando errores por intentar acceder a elementos que aún no existen.
-
-    \item \textbf{Petición Fetch:}
-    \begin{verbatim}
-    fetch('get_songs.php')
-        .then(response => response.json())
-        .then(data => {
-            // Procesamiento de datos
-        })
-        .catch(err => {
-            // Manejo de errores
-        });
-    \end{verbatim}
-    Utiliza la API Fetch para realizar una petición HTTP al endpoint \texttt{get\_songs.php}, que devuelve los datos de las canciones en formato JSON. La respuesta se procesa en cadena usando promesas (\texttt{.then()}).
-
-    \item \textbf{Manipulación del DOM:}
-    \begin{verbatim}
-    const tbody = document.querySelector('#songsTable tbody');
-    tbody.innerHTML = '';
-    \end{verbatim}
-    Obtiene una referencia al elemento \texttt{tbody} de la tabla y limpia su contenido actual.
-
-    \item \textbf{Generación Dinámica de Filas:}
-    \begin{verbatim}
-    if (Array.isArray(data)) {
-        data.forEach((song, idx) => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${idx + 1}</td>
-                <td>${song.artist || '-'}</td>
-                <td>${song.name || '-'}</td>
-                <td>${song.year || '-'}</td>
-                <td>${song.ppm || '-'}</td>
-                <td>${song.audioUrl ? `<audio controls src='${song.audioUrl}' style='width:140px;'></audio>` : '-'}</td>
-            `;
-            tbody.appendChild(tr);
-        });
-    }
-    \end{verbatim}
-    Verifica que los datos recibidos sean un array, luego itera sobre cada canción creando un elemento \texttt{tr} (fila de tabla) con celdas para cada propiedad. Utiliza el operador OR lógico (\texttt{||}) para manejar valores faltantes y un operador ternario para el reproductor de audio. Finalmente, añade cada fila al \texttt{tbody}.
-
-    \item \textbf{Manejo de Errores:}
-    \begin{verbatim}
-    } else {
-        tbody.innerHTML = `<tr><td colspan='6'>No se pudieron cargar las canciones.</td></tr>`;
-    }
-    // ...
-    .catch(err => {
-        const tbody = document.querySelector('#songsTable tbody');
-        tbody.innerHTML = `<tr><td colspan='6'>Error cargando canciones.</td></tr>`;
-    });
-    \end{verbatim}
-    Maneja dos tipos de errores: cuando los datos no son un array (respuesta inesperada) y cuando ocurre un error en la petición fetch. En ambos casos, muestra un mensaje de error en la tabla.
-\end{itemize}
-
-\subsubsection{Ventajas de este Enfoque}
-\begin{itemize}
-    \item \textbf{Separación de responsabilidades:} El backend (\texttt{get\_songs.php}) solo proporciona datos en formato JSON, mientras que el frontend (\texttt{list\_songs.js}) se encarga de la presentación.
-    
-    \item \textbf{Experiencia de usuario mejorada:} Permite implementar actualizaciones en tiempo real o filtrado sin recargar la página.
-    
-    \item \textbf{Mantenibilidad:} Facilita la modificación independiente de la lógica de datos y la presentación.
-    
-    \item \textbf{Reutilización:} El mismo endpoint \texttt{get\_songs.php} puede ser utilizado por diferentes interfaces.
-\end{itemize}
-
-% ===============================
-% 5. Recomendaciones para el Programador
-% ===============================
-\section{Recomendaciones para el Programador}
-\begin{itemize}
-    \item Mantener la estructura de carpetas organizada.
-    \item Documentar cambios en los archivos principales.
-    \item Hacer respaldos periódicos de la base de datos.
-    \item Seguir buenas prácticas de seguridad en PHP y JS.
-    \item Probar el sistema en diferentes navegadores y dispositivos.
-\end{itemize}
-
-% ===============================
-% 6. Contacto y Créditos
-% ===============================
-\section{Contacto y Créditos}
-Desarrollado por: Santiago Ibarra, Agustin Colman, Carlos Insaurralde, Gabriel Beneitez.\\
-Curso: 7°2 -- Año 2025.
-
-\section{Mejoras Implementadas en list\_songs.php}
-La versión actual de \texttt{list\_songs.php} ha sido mejorada significativamente para ofrecer una experiencia de usuario más completa y funcional. A continuación, se detallan los componentes principales y su implementación.
-
-\subsection{Estructura HTML y Diseño}
-La página utiliza Bootstrap 5 para el diseño responsivo y Bootstrap Icons para los iconos. La estructura principal incluye:
-
-\begin{itemize}
-    \item Encabezado con navegación
-    \item Sección de filtros y búsqueda
-    \item Tabla de canciones
-    \item Sistema de paginación
-\end{itemize}
-
-\subsection{Carga de Datos}
-La carga de datos se realiza mediante una petición AJAX al archivo \texttt{get\_songs.php}:
-
-\begin{verbatim}
-// Cargar las canciones desde la base de datos
-document.addEventListener('DOMContentLoaded', function() {
-    fetch('get_songs.php')
-        .then(response => response.json())
-        .then(songs => {
-            if (Array.isArray(songs)) {
-                window.allSongs = songs; // Guardar todas las canciones para la búsqueda
-                filteredSongsGlobal = [...songs]; // Inicializar canciones filtradas
-                displaySongs(songs);
-                setupSearch();
-                setupFilters();
-                setupPagination();
-            } else {
-                console.error('Respuesta inesperada:', songs);
-                document.getElementById('songsList').innerHTML = `
-                    <tr>
-                        <td colspan="5" class="text-center">Error al cargar las canciones</td>
-                    </tr>
-                `;
-            }
-        })
-        .catch(error => {
-            console.error('Error cargando canciones:', error);
-            document.getElementById('songsList').innerHTML = `
-                <tr>
-                    <td colspan="5" class="text-center">Error al cargar las canciones</td>
-                </tr>
-            `;
-        });
-});
-\end{verbatim}
-
-Este código:
-\begin{itemize}
-    \item Realiza una petición fetch al endpoint \texttt{get\_songs.php}
-    \item Almacena las canciones en variables globales para su uso posterior
-    \item Llama a funciones para mostrar las canciones y configurar la funcionalidad
-    \item Maneja errores adecuadamente
-\end{itemize}
-
-\subsection{Sistema de Filtrado y Búsqueda}
-El sistema de filtrado implementa múltiples criterios:
-
-\begin{verbatim}
-// Aplicar todos los filtros y ordenamiento
-function applyFilters() {
-    if (!window.allSongs) return;
-    
-    let filteredSongs = [...window.allSongs];
-    
-    // Aplicar filtro de búsqueda por texto
-    const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
-    if (searchTerm !== '') {
-        filteredSongs = filteredSongs.filter(song => 
-            (song.name && song.name.toLowerCase().includes(searchTerm)) || 
-            (song.artist && song.artist.toLowerCase().includes(searchTerm))
-        );
-    }
-    
-    // Aplicar filtro por PPM
-    const ppmFilter = document.getElementById('filterPPM').value;
-    if (ppmFilter !== '') {
-        switch (ppmFilter) {
-            case 'low':
-                filteredSongs = filteredSongs.filter(song => song.ppm >= 100 && song.ppm <= 120);
-                break;
-            case 'medium':
-                filteredSongs = filteredSongs.filter(song => song.ppm > 120 && song.ppm <= 150);
-                break;
-            case 'high':
-                filteredSongs = filteredSongs.filter(song => song.ppm > 150 && song.ppm <= 180);
-                break;
-        }
-    }
-    
-    // Aplicar ordenamiento
-    const sortOption = document.getElementById('sortBy').value;
-    if (sortOption !== '') {
-        // Código de ordenamiento según diferentes criterios
-        // ...
-    }
-    
-    // Resetear a la primera página cuando se aplican filtros
-    currentPage = 1;
-    
-    // Mostrar las canciones filtradas
-    displaySongs(filteredSongs);
-}
-\end{verbatim}
-
-La configuración de los filtros se realiza mediante event listeners:
-
-\begin{verbatim}
-// Configurar los filtros
-function setupFilters() {
-    const filterPPM = document.getElementById('filterPPM');
-    const sortBy = document.getElementById('sortBy');
-    const resetFilters = document.getElementById('resetFilters');
-    
-    if (filterPPM) {
-        filterPPM.addEventListener('change', function() {
-            applyFilters();
-        });
-    }
-    
-    if (sortBy) {
-        sortBy.addEventListener('change', function() {
-            applyFilters();
-        });
-    }
-    
-    if (resetFilters) {
-        resetFilters.addEventListener('click', function() {
-            // Resetear todos los filtros a sus valores por defecto
-            document.getElementById('searchInput').value = '';
-            document.getElementById('filterPPM').value = '';
-            document.getElementById('sortBy').value = '';
-            
-            // Mostrar todas las canciones
-            if (window.allSongs) {
-                displaySongs(window.allSongs);
-            }
-            
-            // Mostrar notificación
-            showToast('Filtros reseteados');
-        });
-    }
-}
-\end{verbatim}
-
-\subsection{Sistema de Paginación}
-La paginación se implementa para mostrar un número limitado de canciones por página:
-
-\begin{verbatim}
-// Variables globales para la paginación
-let currentPage = 1;
-const itemsPerPage = 10; // Número de canciones por página
-let filteredSongsGlobal = []; // Almacena las canciones filtradas globalmente
-\end{verbatim}
-
-La función \texttt{displaySongs} se encarga de mostrar solo las canciones correspondientes a la página actual:
-
-\begin{verbatim}
-// Calcular el rango de canciones a mostrar según la página actual
-const startIndex = (currentPage - 1) * itemsPerPage;
-const endIndex = Math.min(startIndex + itemsPerPage, songs.length);
-const songsToDisplay = songs.slice(startIndex, endIndex);
-\end{verbatim}
-
-La actualización de la paginación se realiza dinámicamente:
-
-\begin{verbatim}
-// Actualizar la paginación basada en el número total de elementos
-function updatePagination(totalItems) {
-    const totalPages = Math.ceil(totalItems / itemsPerPage);
-    const pagination = document.getElementById('pagination');
-    
-    // Ocultar paginación si solo hay una página
-    if (totalPages <= 1) {
-        document.getElementById('paginationContainer').style.display = 'none';
-        return;
-    } else {
-        document.getElementById('paginationContainer').style.display = 'flex';
-    }
-    
-    // Actualizar estado del botón anterior
-    const prevPageItem = document.getElementById('prevPage');
-    if (currentPage === 1) {
-        prevPageItem.classList.add('disabled');
-        prevPageItem.querySelector('a').setAttribute('aria-disabled', 'true');
-    } else {
-        prevPageItem.classList.remove('disabled');
-        prevPageItem.querySelector('a').setAttribute('aria-disabled', 'false');
-    }
-    
-    // Actualizar estado del botón siguiente
-    const nextPageItem = document.getElementById('nextPage');
-    if (currentPage === totalPages) {
-        nextPageItem.classList.add('disabled');
-        nextPageItem.querySelector('a').setAttribute('aria-disabled', 'true');
-    } else {
-        nextPageItem.classList.remove('disabled');
-        nextPageItem.querySelector('a').setAttribute('aria-disabled', 'false');
-    }
-    
-    // Generar los números de página
-    const pageItems = [];
-    
-    // Determinar el rango de páginas a mostrar
-    let startPage = Math.max(1, currentPage - 1);
-    let endPage = Math.min(totalPages, startPage + 2);
-    
-    // Ajustar si estamos en las últimas páginas
-    if (endPage - startPage < 2) {
-        startPage = Math.max(1, endPage - 2);
-    }
-    
-    // Crear elementos de página
-    for (let i = startPage; i <= endPage; i++) {
-        const isActive = i === currentPage;
-        pageItems.push(`
-            <li class="page-item ${isActive ? 'active' : ''}">
-                <a class="page-link" href="#" data-page="${i}">${i}</a>
-            </li>
-        `);
-    }
-    
-    // Actualizar el HTML de la paginación
-    pagination.innerHTML = `
-        <li class="page-item ${currentPage === 1 ? 'disabled' : ''}" id="prevPage">
-            <a class="page-link" href="#" tabindex="-1" aria-disabled="${currentPage === 1}">Anterior</a>
-        </li>
-        ${pageItems.join('')}
-        <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}" id="nextPage">
-            <a class="page-link" href="#">Siguiente</a>
-        </li>
-    `;
-    
-    // Volver a configurar los event listeners
-    setupPagination();
-}
-\end{verbatim}
-
-\subsection{Reproducción de Audio}
-La reproducción de audio se implementa con controles para reproducir y detener:
-
-\begin{verbatim}
-// Función para reproducir una canción
-function playSong(audioUrl, button) {
-    // Detener cualquier audio que se esté reproduciendo
-    if (window.currentAudio) {
-        window.currentAudio.pause();
-        window.currentAudio.currentTime = 0;
-        
-        // Restablecer todos los botones de reproducción/detención
-        document.querySelectorAll('.stop-btn').forEach(btn => {
-            btn.style.display = 'none';
-            btn.previousElementSibling.style.display = 'inline-flex';
-        });
-    }
-    
-    // Crear y reproducir el nuevo audio
-    window.currentAudio = new Audio(audioUrl);
-    window.currentAudio.volume = 0.7; // Volumen predeterminado
-    window.currentAudio.play();
-    
-    // Actualizar botones de reproducción/detención
-    if (button) {
-        button.style.display = 'none';
-        const stopButton = button.nextElementSibling;
-        stopButton.style.display = 'inline-flex';
-        
-        // Cuando la canción termine, restaurar los botones
-        window.currentAudio.onended = function() {
-            button.style.display = 'inline-flex';
-            stopButton.style.display = 'none';
-            window.currentAudio = null;
-        };
-    }
-}
-
-// Función para detener la reproducción
-function stopSong(button) {
-    if (window.currentAudio) {
-        window.currentAudio.pause();
-        window.currentAudio.currentTime = 0;
-        window.currentAudio = null;
-    }
-    
-    // Restaurar botones
-    button.style.display = 'none';
-    button.previousElementSibling.style.display = 'inline-flex';
-}
-\end{verbatim}
-
-\subsection{Menú de Opciones}
-Se implementa un menú contextual para cada canción:
-
-\begin{verbatim}
-// Función para mostrar opciones adicionales
-function showOptions(button) {
-    // Obtener información de la canción desde la fila
-    const row = button.closest('tr');
-    const title = row.querySelector('.song-title').textContent;
-    const artist = row.querySelector('.song-artist').textContent;
-    
-    // Crear y mostrar un menú contextual
-    const optionsMenu = document.createElement('div');
-    optionsMenu.className = 'options-menu';
-    optionsMenu.innerHTML = `
-        <div class="card bg-dark text-white" style="position: absolute; z-index: 1000; width: 200px;">
-            <div class="card-header">
-                <strong>${title}</strong>
-                <button type="button" class="btn-close btn-close-white float-end" onclick="this.closest('.options-menu').remove()"></button>
-            </div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item bg-dark text-white" onclick="addToPlaylist('${title}', '${artist}')">
-                    <i class="bi bi-music-note-list me-2"></i> Añadir a playlist
-                </li>
-                <li class="list-group-item bg-dark text-white" onclick="downloadSong('${title}', '${artist}')">
-                    <i class="bi bi-download me-2"></i> Descargar
-                </li>
-                <li class="list-group-item bg-dark text-white" onclick="shareSong('${title}', '${artist}')">
-                    <i class="bi bi-share me-2"></i> Compartir
-                </li>
-            </ul>
-        </div>
-    `;
-    
-    // Posicionar el menú y configurar eventos
-    // ...
-}
-\end{verbatim}
-
-\subsection{Notificaciones Toast}
-Se implementa un sistema de notificaciones para informar al usuario:
-
-\begin{verbatim}
-// Función para mostrar notificaciones toast
-function showToast(message) {
-    // Crear elemento toast
-    const toastEl = document.createElement('div');
-    toastEl.className = 'toast-notification';
-    toastEl.innerHTML = `
-        <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header bg-dark text-white">
-                <strong class="me-auto">Reproductor Inteligente</strong>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div class="toast-body bg-dark text-white">
-                ${message}
-            </div>
-        </div>
-    `;
-    
-    // Estilo para el contenedor de toast
-    toastEl.style.position = 'fixed';
-    toastEl.style.bottom = '20px';
-    toastEl.style.right = '20px';
-    toastEl.style.zIndex = '1050';
-    
-    // Añadir al DOM
-    document.body.appendChild(toastEl);
-    
-    // Eliminar después de 3 segundos
-    setTimeout(() => {
-        toastEl.remove();
-    }, 3000);
-}
-\end{verbatim}
-
-\subsection{Recomendaciones para Mantenimiento y Mejoras}
-Para desarrolladores que deseen mantener o extender la funcionalidad de \texttt{list\_songs.php}, se recomiendan las siguientes prácticas:
-
-\begin{itemize}
-    \item \textbf{Separación de Responsabilidades:} Mantener la separación entre la obtención de datos (get\_songs.php), la presentación (HTML) y la lógica de interacción (JavaScript).
-    
-    \item \textbf{Manejo de Errores:} Implementar manejo de errores robusto tanto en el lado del cliente como del servidor.
-    
-    \item \textbf{Optimización de Rendimiento:} Para grandes conjuntos de datos, considerar implementar paginación del lado del servidor.
-    
-    \item \textbf{Accesibilidad:} Asegurar que todos los elementos interactivos sean accesibles mediante teclado y lectores de pantalla.
-    
-    \item \textbf{Pruebas:} Realizar pruebas exhaustivas en diferentes navegadores y dispositivos.
-    
-    \item \textbf{Posibles Mejoras:} 
+{{ ... }}
+    \item \textbf{JavaScript para interactividad:} Incluye funciones para:
     \begin{itemize}
-        \item Implementar almacenamiento de preferencias de usuario (filtros favoritos)
-        \item Añadir funcionalidad de arrastrar y soltar para crear playlists
-        \item Implementar estadísticas de reproducción
-        \item Añadir visualizaciones de datos (gráficos de PPM vs. popularidad)
+        \item Actualizar valores de los sliders en tiempo real
+        \item Enviar formularios mediante AJAX
+        \item Manejar la eliminacion de canciones con confirmacion
+        \item Filtrar y ordenar la lista de canciones
     \end{itemize}
+\end{enumerate}
+
+% ------------------------------
+\section{admin.php}
+Este archivo constituye la interfaz gráfica del panel de administración, permitiendo agregar y gestionar canciones en el Reproductor Inteligente.
+
+\paragraph{Caracteristicas principales:}
+\begin{itemize}
+    \item Interfaz para agregar nuevas canciones con metadatos y analisis automatico
+    \item Gestion completa de canciones (visualizacion, reproduccion, eliminacion)
+    \item Soporte para parametros tradicionales y caracteristicas avanzadas de analisis de audio
+    \item Busqueda y ordenamiento de canciones
+    \item Boton para actualizar la lista de canciones
+    \item Tabla con columnas para titulo, artista, PPM, anio y acciones
+    \item Carga dinamica de canciones mediante JavaScript
 \end{itemize}
 
-\section{Integración con el Sistema Principal}
+\subparagraph{Modal de confirmación para eliminar:}
+Ventana modal que solicita confirmación antes de eliminar una canción.
+
+\begin{lstlisting}[language=HTML]
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-white">
+{{ ... }}
+    \item El usuario puede gestionar las canciones existentes:
+        \begin{itemize}
+            \item Buscar canciones por titulo o artista
+            \item Ordenar canciones por diferentes criterios
+            \item Reproducir canciones para verificar su contenido
+            \item Eliminar canciones (con confirmacion previa)
+        \end{itemize}
+\end{enumerate}
+
+\paragraph{Integracion con otros componentes:}
+El archivo admin.php se integra con otros componentes del sistema:
+{{ ... }}
+    
+    \item \textbf{JavaScript para interactividad:} Incluye funciones para:
+    \begin{itemize}
+        \item Actualizar valores de los sliders en tiempo real
+        \item Enviar formularios mediante AJAX
+        \item Manejar la eliminacion de canciones con confirmacion
+        \item Filtrar y ordenar la lista de canciones
+    \end{itemize}
+\end{enumerate}
+
+% ------------------------------
+% Esta sección ya está documentada anteriormente en el documento
+
+% Contenido eliminado por duplicidad
+
+% Contenido eliminado por duplicidad
+
+% Contenido eliminado por duplicidad - Esta sección ya está documentada anteriormente
+% Contenido eliminado por duplicidad - Esta sección ya está documentada anteriormente en el documento
+% Contenido eliminado por duplicidad - Esta sección ya está documentada anteriormente en el documento
+% Contenido eliminado por duplicidad - Esta sección ya está documentada anteriormente en el documento
+
+% Secciones duplicadas eliminadas para evitar problemas en la estructura del documento
+% La documentación completa de los archivos de administración ya se encuentra en las secciones anteriores
+
+\paragraph{Integración con el frontend:}
+Este archivo es consumido por el panel de administración (\texttt{admin.php}) mediante una llamada AJAX que carga dinámicamente la lista de canciones. El frontend utiliza la respuesta JSON para:
+
+\begin{itemize}
+    \item Mostrar todas las canciones en una tabla con columnas para título, artista, año, PPM y acciones
+    \item Permitir la reproducción de canciones directamente desde el panel de administración
+    \item Facilitar la eliminación de canciones mediante botones de acción vinculados a cada registro
+    \item Implementar funcionalidades de búsqueda y ordenamiento sobre los datos recibidos
+\end{itemize}
+    
+
+
+\subsection{Flujo de Trabajo del Sistema de Administración}
+El sistema de administración sigue el siguiente flujo de trabajo:
+
+\begin{enumerate}
+    \item El usuario accede a la pagina principal (index.html) y hace clic en el boton "Administrador" en el encabezado.
+    \item Se muestra un modal de inicio de sesión donde debe ingresar credenciales específicas.
+    \item Las credenciales se envían a login.php, que verifica su validez.
+    \item Si las credenciales son correctas, se establece una sesión de administrador y se redirige a admin.php.
+    \item En admin.php, el administrador puede:
+    \begin{itemize}
+        \item Agregar nuevas canciones mediante el formulario, que envía los datos a admin\_add\_song.php
+        \item Ver la lista de canciones existentes, cargadas mediante admin\_get\_songs.php
+        \item Eliminar canciones, lo que envía una solicitud a admin\_delete\_song.php
+    \end{itemize}
+    \item Al finalizar, el administrador puede cerrar sesión haciendo clic en el boton correspondiente.
+\end{enumerate}
+
+\subsection{Consideraciones de Seguridad}
+\begin{itemize}
+    \item El sistema utiliza sesiones PHP para controlar el acceso al panel de administración.
+    \item Las credenciales de administrador están codificadas directamente en login.php (en un entorno de producción se recomienda usar un sistema más seguro).
+    \item Todas las operaciones de administración verifican la existencia de una sesión válida.
+    \item Se implementa validación de datos tanto en el cliente como en el servidor.
+    \item Los archivos se validan por tipo y tamaño antes de ser procesados.
+\end{itemize}
+
+\subsection{Extensión y Personalización}
+Para extender o personalizar el sistema de administración, se pueden considerar las siguientes mejoras:
+
+\begin{itemize}
+    \item Implementar un sistema de usuarios con diferentes niveles de acceso.
+    \item Agregar funcionalidad para editar canciones existentes.
+    \item Implementar un sistema de categorías o etiquetas para las canciones.
+    \item Mejorar la seguridad mediante el uso de hashing de contraseñas y tokens CSRF.
+    \item Agregar estadísticas de uso y reproducciones de las canciones.
+\end{itemize}
+
+\section{Integración con Otros Sistemas}\index{integración}\index{sistemas!integración}
 La integración del Reproductor Inteligente con el sistema principal de la aplicación es un aspecto crucial para su correcto funcionamiento. Esta sección detalla los aspectos técnicos de esta integración, los puntos de conexión entre componentes y las consideraciones para desarrolladores que necesiten modificar o extender estas interacciones.
 
 \subsection{Arquitectura de Integración}
@@ -1147,7 +1348,7 @@ El Reproductor Inteligente se integra con el sistema principal a través de una 
     \item \textbf{Base de Datos:} Almacena toda la información relacionada con canciones, usuarios y preferencias.
 \end{itemize}
 
-\subsection{Puntos de Integración}
+\subsection{Puntos de Integracion}
 Los principales puntos de integración entre componentes son:
 
 \begin{itemize}

@@ -1,0 +1,353 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[spanish,es-noshorthands]{babel}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{xcolor}
+\geometry{a4paper, margin=2.5cm}
+
+% Configuración de encabezados y pies de página
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyhead[R]{\includegraphics[height=1.5cm]{apipmusiclogo.png}}
+\fancyfoot[C]{\thepage}
+\fancyfoot[R]{Reproductor Inteligente}
+
+% Configuración para bloques de código
+\lstset{
+  basicstyle=\small\ttfamily,
+  breaklines=true,
+  frame=single,
+  numbers=left,
+  numberstyle=\tiny,
+  keywordstyle=\color{blue},
+  commentstyle=\color{green!40!black},
+  stringstyle=\color{red},
+  showstringspaces=false
+}
+
+\begin{document}
+
+% Logo arriba a la derecha
+\begin{flushright}
+    \includegraphics[width=4cm]{LOGO-EEST1.png}
+\end{flushright}
+
+\vspace*{2cm}
+
+\begin{center}
+    {\LARGE\bfseries Manual del Sistema de Administración} \\[1.5cm]
+    \textbf{Integrantes:} \\[0.3cm]
+    Santiago Ibarra \\[0.2cm]
+    Agustin Colman \\[0.2cm]
+    Carlos Insaurralde \\[0.2cm]
+    Gabriel Beneitez \\[1.2cm]
+    Curso: 7\textdegree2 \\
+    \vspace{0.5cm}
+    \textbf{Materia:} Proyecto de Desarrollo de Software para Plataformas Móviles
+    
+    \vspace{0.7cm}
+    \includegraphics[width=0.3\textwidth]{apipmusiclogo.png}\\[0.5cm]
+\end{center}
+
+\vfill
+
+\begin{center}
+    \textit{Escuela de Educación Secundaria Técnica N\textdegree1} \\
+    \textit{Año 2025}
+\end{center}
+
+\thispagestyle{empty}
+\newpage
+
+% Índice de contenidos con enlaces
+\tableofcontents
+\newpage
+
+\section{Sistema de Administración}
+\subsection{Descripción General}
+El sistema de administración permite gestionar la biblioteca de canciones mediante un panel protegido por autenticación. Solo los usuarios con credenciales de administrador pueden acceder a estas funcionalidades.
+
+\subsection{Archivos Relacionados}
+\begin{itemize}
+    \item \texttt{login.php} - Maneja la autenticación de administradores
+    \item \texttt{admin.php} - Panel de administración principal
+    \item \texttt{admin\_add\_song.php} - Procesa la adición de nuevas canciones
+    \item \texttt{admin\_delete\_song.php} - Procesa la eliminación de canciones
+    \item \texttt{admin\_get\_songs.php} - Obtiene la lista de canciones para el panel de administración
+\end{itemize}
+
+\subsection{Detalles de Implementación}
+\subsubsection{admin.php}
+Este archivo constituye la interfaz gráfica del panel de administración, permitiendo agregar y gestionar canciones en el Reproductor Inteligente.
+
+\paragraph{Características principales:}
+\begin{itemize}
+    \item Control de acceso mediante sesiones PHP
+    \item Formulario para agregar nuevas canciones con todos sus parámetros
+    \item Listado de canciones existentes con opciones para administrarlas
+    \item Interfaz para eliminar canciones
+\end{itemize}
+
+\paragraph{Estructura del código:}
+El archivo se estructura en las siguientes secciones principales:
+
+\begin{enumerate}
+    \item \textbf{Verificación de sesión:} Al inicio del archivo se verifica si el usuario está autenticado como administrador mediante \texttt{\$\_SESSION['admin\_logged\_in']}. Si no está autenticado, se redirige a la página principal.
+    
+    \begin{lstlisting}[language=PHP]
+<?php
+session_start();
+
+// Verificar si el usuario esta autenticado como administrador
+if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+    // Si no esta autenticado, redirigir a la pagina principal
+    header('Location: index.html');
+    exit;
+}
+?>
+    \end{lstlisting}
+    
+    \item \textbf{Interfaz de usuario:} Implementa un panel completo con:
+    \begin{itemize}
+        \item Header con navegación y botón de cierre de sesión
+        \item Formulario para agregar canciones con campos para:
+        \begin{itemize}
+            \item Datos básicos (título, artista, año)
+            \item Parámetros tradicionales (energía, bailabilidad, felicidad, instrumentalidad)
+            \item Características avanzadas (dinámica, brillo, complejidad, ritmo)
+            \item Carga de archivos de audio
+        \end{itemize}
+    \end{itemize}
+    
+    \item \textbf{Tabla de administración:} Muestra todas las canciones con opciones para:
+    \begin{itemize}
+        \item Buscar por título o artista
+        \item Ordenar por diferentes campos
+        \item Eliminar canciones
+    \end{itemize}
+    
+    \item \textbf{JavaScript para interactividad:} Incluye funciones para:
+    \begin{itemize}
+        \item Actualizar valores de los sliders en tiempo real
+        \item Enviar formularios mediante AJAX
+        \item Manejar la eliminación de canciones con confirmación
+        \item Filtrar y ordenar la lista de canciones
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection{admin\_add\_song.php}
+Este archivo procesa la solicitud de agregar una nueva canción, valida los datos, guarda el archivo de audio y registra la información en la base de datos.
+
+\paragraph{Características principales:}
+\begin{itemize}
+    \item Validación completa de datos y archivos
+    \item Manejo de errores con respuestas JSON
+    \item Soporte para parámetros tradicionales y avanzados
+    \item Almacenamiento de archivos de audio
+\end{itemize}
+
+\paragraph{Estructura del código:}
+\begin{enumerate}
+    \item \textbf{Configuración inicial:}
+    \begin{itemize}
+        \item Establece cabeceras para respuesta JSON
+        \item Define variables de conexión a la base de datos
+        \item Configura el directorio para almacenar archivos de audio
+    \end{itemize}
+    
+    \begin{lstlisting}[language=PHP]
+<?php
+header('Content-Type: application/json');
+
+$host = 'localhost';
+$dbname = 'songs_database';
+$user = 'root';
+$pass = '';
+
+// Directorio donde se guardaran los archivos de audio
+$uploadDir = 'SpotiDownloader.com - Las 100 mejores canciones de la historia del Rock/';
+    \end{lstlisting}
+    
+    \item \textbf{Validación de datos:}
+    \begin{itemize}
+        \item Verifica que se haya enviado un archivo de audio
+        \item Comprueba que se hayan proporcionado título y artista
+        \item Valida el formato del archivo (mp3, wav, ogg)
+        \item Verifica el tamaño máximo (20MB)
+    \end{itemize}
+    
+    \item \textbf{Procesamiento del archivo:}
+    \begin{itemize}
+        \item Genera un nombre para el archivo basado en el título
+        \item Mueve el archivo al directorio de destino
+    \end{itemize}
+    
+    \item \textbf{Procesamiento de parámetros:}
+    \begin{itemize}
+        \item Extrae los parámetros tradicionales (energía, bailabilidad, etc.)
+        \item Extrae las características avanzadas (dinámica, brillo, etc.)
+        \item Implementa lógica para usar características avanzadas como sustitutos de parámetros tradicionales si es necesario
+    \end{itemize}
+    
+    \begin{lstlisting}[language=PHP]
+// Si no se proporcionan los parametros tradicionales, usar los nuevos como sustitutos
+if ($energy === null && $rhythm !== null) {
+    $energy = $rhythm; // Usar ritmo como sustituto de energia
+}
+if ($danceability === null && $dynamics !== null) {
+    $danceability = $dynamics; // Usar dinamica como sustituto de bailabilidad
+}
+if ($happiness === null && $brightness !== null) {
+    $happiness = $brightness; // Usar brillo como sustituto de felicidad
+}
+if ($instrumentalness === null && $complexity !== null) {
+    $instrumentalness = 1 - $complexity; // Usar inverso de complejidad como instrumentalidad
+}
+    \end{lstlisting}
+    
+    \item \textbf{Inserción en la base de datos:}
+    \begin{itemize}
+        \item Prepara y ejecuta la consulta SQL para insertar la canción
+        \item Devuelve una respuesta JSON con el resultado de la operación
+    \end{itemize}
+    
+    \item \textbf{Manejo de errores:}
+    \begin{itemize}
+        \item Captura excepciones durante el proceso
+        \item Elimina el archivo si se produjo un error
+        \item Devuelve mensajes de error detallados
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection{admin\_delete\_song.php}
+Este archivo elimina una canción del sistema, tanto de la base de datos como el archivo físico.
+
+\paragraph{Características principales:}
+\begin{itemize}
+    \item Recibe datos en formato JSON
+    \item Elimina el archivo físico de audio
+    \item Elimina el registro de la base de datos
+    \item Proporciona respuestas JSON con el resultado
+\end{itemize}
+
+\paragraph{Estructura del código:}
+\begin{enumerate}
+    \item \textbf{Recepción de datos:}
+    \begin{itemize}
+        \item Decodifica los datos JSON recibidos
+        \item Valida que se haya proporcionado un ID de canción
+    \end{itemize}
+    
+    \begin{lstlisting}[language=PHP]
+<?php
+header('Content-Type: application/json');
+
+// Obtener datos de la solicitud
+$data = json_decode(file_get_contents('php://input'), true);
+
+if (!isset($data['id']) || empty($data['id'])) {
+    http_response_code(400);
+    echo json_encode([
+        'success' => false,
+        'message' => 'ID de la cancion no proporcionado'
+    ]);
+    exit;
+}
+    \end{lstlisting}
+    
+    \item \textbf{Proceso de eliminación:}
+    \begin{itemize}
+        \item Primero obtiene la información de la canción, especialmente la URL del audio
+        \item Verifica si el archivo existe y lo elimina del sistema de archivos
+        \item Elimina el registro de la base de datos mediante una consulta SQL
+    \end{itemize}
+    
+    \item \textbf{Manejo de respuestas:}
+    \begin{itemize}
+        \item Devuelve una respuesta JSON con el resultado de la operación
+        \item Incluye manejo de errores para casos como canción no encontrada
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection{admin\_get\_songs.php}
+Este archivo recupera todas las canciones de la base de datos para mostrarlas en el panel de administración.
+
+\paragraph{Características principales:}
+\begin{itemize}
+    \item Consulta a la base de datos para obtener todas las canciones
+    \item Procesa las rutas de audio para asegurar que sean accesibles
+    \item Devuelve los datos en formato JSON
+\end{itemize}
+
+\paragraph{Estructura del código:}
+\begin{enumerate}
+    \item \textbf{Consulta a la base de datos:}
+    \begin{itemize}
+        \item Establece conexión con la base de datos
+        \item Ejecuta una consulta SQL para obtener todas las canciones con sus IDs, artistas, nombres, años, PPM y URLs de audio
+        \item Ordena los resultados por nombre
+    \end{itemize}
+    
+    \begin{lstlisting}[language=PHP]
+// Obtener todas las canciones con sus IDs para administracion
+$stmt = $pdo->query("SELECT id, artist, name, year, PPM as ppm, audioUrl FROM songs ORDER BY name ASC");
+$songs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    \end{lstlisting}
+    
+    \item \textbf{Procesamiento de rutas:}
+    \begin{itemize}
+        \item Verifica que las rutas de audio estén en formato correcto para ser accesibles desde el navegador
+        \item Mantiene las rutas relativas para compatibilidad
+    \end{itemize}
+    
+    \item \textbf{Respuesta:}
+    \begin{itemize}
+        \item Devuelve los datos en formato JSON para ser procesados por el frontend
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Flujo de Trabajo del Sistema de Administración}
+El sistema de administración sigue el siguiente flujo de trabajo:
+
+\begin{enumerate}
+    \item El usuario accede a la página principal (index.html) y hace clic en el botón "Administrador" en el encabezado.
+    \item Se muestra un modal de inicio de sesión donde debe ingresar credenciales específicas.
+    \item Las credenciales se envían a login.php, que verifica su validez.
+    \item Si las credenciales son correctas, se establece una sesión de administrador y se redirige a admin.php.
+    \item En admin.php, el administrador puede:
+    \begin{itemize}
+        \item Agregar nuevas canciones mediante el formulario, que envía los datos a admin\_add\_song.php
+        \item Ver la lista de canciones existentes, cargadas mediante admin\_get\_songs.php
+        \item Eliminar canciones, lo que envía una solicitud a admin\_delete\_song.php
+    \end{itemize}
+    \item Al finalizar, el administrador puede cerrar sesión haciendo clic en el botón correspondiente.
+\end{enumerate}
+
+\subsection{Consideraciones de Seguridad}
+\begin{itemize}
+    \item El sistema utiliza sesiones PHP para controlar el acceso al panel de administración.
+    \item Las credenciales de administrador están codificadas directamente en login.php (en un entorno de producción se recomienda usar un sistema más seguro).
+    \item Todas las operaciones de administración verifican la existencia de una sesión válida.
+    \item Se implementa validación de datos tanto en el cliente como en el servidor.
+    \item Los archivos se validan por tipo y tamaño antes de ser procesados.
+\end{itemize}
+
+\subsection{Extensión y Personalización}
+Para extender o personalizar el sistema de administración, se pueden considerar las siguientes mejoras:
+
+\begin{itemize}
+    \item Implementar un sistema de usuarios con diferentes niveles de acceso.
+    \item Agregar funcionalidad para editar canciones existentes.
+    \item Implementar un sistema de categorías o etiquetas para las canciones.
+    \item Mejorar la seguridad mediante el uso de hashing de contraseñas y tokens CSRF.
+    \item Agregar estadísticas de uso y reproducciones de las canciones.
+\end{itemize}
