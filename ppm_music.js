@@ -164,13 +164,38 @@ function updatePPMDisplay(value) {
 }
 
 function updateRecommendations(currentPPM) {
-    // Encontrar canciones con PPM similares (±5 PPM para mayor precisión)
-    const matchingSongs = songs
-        .filter(song => Math.abs(song.ppm - currentPPM) <= 5)
-        .sort((a, b) => Math.abs(a.ppm - currentPPM) - Math.abs(b.ppm - currentPPM)) // Ordenar por similitud
-        .slice(0, 3); // Mostrar las 3 canciones más cercanas al PPM actual
+    // Calcular una puntuación para cada canción basada en la proximidad al PPM actual
+    // Usamos una función gaussiana para dar mayor peso a las canciones más cercanas
+    // y una disminución gradual de relevancia a medida que se alejan
+    const scoredSongs = songs.map(song => {
+        // Calcular la diferencia de PPM
+        const ppmDiff = Math.abs(song.ppm - currentPPM);
+        
+        // Función gaussiana para calcular la puntuación de similitud
+        // La puntuación será 1.0 para diferencia 0, y disminuirá exponencialmente
+        // sigma determina qué tan rápido disminuye la puntuación (mayor sigma = más canciones consideradas)
+        const sigma = 5; // Ajustar este valor para controlar la sensibilidad
+        const score = Math.exp(-(ppmDiff * ppmDiff) / (2 * sigma * sigma));
+        
+        return {
+            ...song,
+            score: score,
+            ppmDiff: ppmDiff
+        };
+    });
+    
+    // Ordenar por puntuación (de mayor a menor)
+    const matchingSongs = scoredSongs
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 3); // Mostrar las 3 canciones con mejor puntuación
 
-    recommendationsContainer.innerHTML = matchingSongs.map(song => `
+    recommendationsContainer.innerHTML = matchingSongs.map(song => {
+        // Calcular el porcentaje de coincidencia para mostrar (0-100%)
+        const matchPercentage = Math.round(song.score * 100);
+        // Determinar el color basado en la puntuación (verde para alta coincidencia, amarillo para media, rojo para baja)
+        const matchColor = matchPercentage > 80 ? '#28a745' : matchPercentage > 50 ? '#ffc107' : '#dc3545';
+        
+        return `
         <div class="col-md-4 mb-4">
             <div class="card song-card text-white">
                 <div class="card-body">
@@ -178,15 +203,23 @@ function updateRecommendations(currentPPM) {
                     <h6 class="card-subtitle mb-2 text-muted">${song.artist}</h6>
                     <p class="card-text">
                         Año: ${song.year}<br>
-                        PPM: ${song.ppm}
+                        PPM: ${song.ppm} <small class="text-muted">(${song.ppmDiff > 0 ? '+' : ''}${song.ppmDiff})</small><br>
+                        <span style="color: ${matchColor}; font-weight: bold;">
+                            Coincidencia: ${matchPercentage}%
+                        </span>
                     </p>
+                    <div class="progress mb-2" style="height: 5px;">
+                        <div class="progress-bar" role="progressbar" style="width: ${matchPercentage}%; background-color: ${matchColor};" 
+                             aria-valuenow="${matchPercentage}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
                     <button class="btn btn-outline-light mt-2" onclick="playSong('${song.audioUrl}', this)">
                         <i class="bi bi-play-fill"></i> Reproducir
                     </button>
                 </div>
             </div>
         </div>
-    `).join('');
+        `;
+    }).join('');
 }
 
 function playSong(audioUrl, buttonElement) {

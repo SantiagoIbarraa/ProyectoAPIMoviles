@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 09-05-2025 a las 07:02:42
+-- Tiempo de generación: 09-05-2025 a las 22:06:54
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -137,7 +137,8 @@ INSERT INTO `songs` (`id`, `artist`, `name`, `year`, `energy`, `danceability`, `
 (135, 'Unknown', 'It\'s My Life', NULL, NULL, NULL, NULL, NULL, '2025-04-30 17:54:07', 143, 'SpotiDownloader.com - Las 100 mejores canciones de la historia del Rock/It\'s My Life.mp3'),
 (150, 'Unknown', 'Remastered 2002', NULL, NULL, NULL, NULL, NULL, '2025-04-30 17:54:07', 172, 'SpotiDownloader.com - Las 100 mejores canciones de la historia del Rock/Remastered 2002.mp3'),
 (153, 'Unknown', 'Rock You Like a Hurricane - 2011', NULL, NULL, NULL, NULL, NULL, '2025-04-30 17:54:07', 116, 'SpotiDownloader.com - Las 100 mejores canciones de la historia del Rock/Rock You Like a Hurricane - 2011.mp3'),
-(167, 'Unknown', 'We Are The Champions - Remastered 2011', NULL, NULL, NULL, NULL, NULL, '2025-04-30 17:54:07', 158, 'SpotiDownloader.com - Las 100 mejores canciones de la historia del Rock/We Are The Champions - Remastered 2011.mp3');
+(167, 'Unknown', 'We Are The Champions - Remastered 2011', NULL, NULL, NULL, NULL, NULL, '2025-04-30 17:54:07', 158, 'SpotiDownloader.com - Las 100 mejores canciones de la historia del Rock/We Are The Champions - Remastered 2011.mp3'),
+(174, 'los piojos', 'como ali', 2006, 1, 0.8, 0.6, 0.05, '2025-05-09 06:05:10', 137, 'SpotiDownloader.com - Las 100 mejores canciones de la historia del Rock/como ali.mp3');
 
 --
 -- Índices para tablas volcadas
@@ -150,12 +151,7 @@ ALTER TABLE `songs`
   ADD PRIMARY KEY (`id`),
   ADD KEY `idx_artist` (`artist`),
   ADD KEY `idx_name` (`name`),
-  ADD KEY `idx_year` (`year`),
-  ADD KEY `idx_ppm` (`PPM`),
-  ADD KEY `idx_energy` (`energy`),
-  ADD KEY `idx_danceability` (`danceability`),
-  ADD KEY `idx_happiness` (`happiness`),
-  ADD KEY `idx_created_at` (`created_at`);
+  ADD KEY `idx_year` (`year`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -165,7 +161,7 @@ ALTER TABLE `songs`
 -- AUTO_INCREMENT de la tabla `songs`
 --
 ALTER TABLE `songs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=174;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=175;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
